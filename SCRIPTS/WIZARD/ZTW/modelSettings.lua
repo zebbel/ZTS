@@ -1,4 +1,4 @@
-loadScript("/SCRIPTS/WIZARD/car/modelTable.lua")()
+loadScript("/SCRIPTS/WIZARD/ZTW/modelTable.lua")()
 
 function printSettings(settingsTable, offset)
     local offsetString = ""

@@ -130,7 +130,6 @@ function shared.background()
 end
 
 function shared.run(event)
-
     drawTitle("Setup", settings.esc.armSwitch)
     drawSteering()
     -- seperator

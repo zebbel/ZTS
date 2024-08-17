@@ -30,7 +30,7 @@ function shared.background()
 end
 
 function shared.run(event)
-    drawTitle(modelName, settings.esc.armSwitch)
+    drawTitle("Setup", settings.esc.armSwitch)
     drawLink(2, 12)
     drawDriveMode(47, 12, CENTER + BOLD)
 

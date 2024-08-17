@@ -3,7 +3,7 @@ modelName = model.getInfo().name
 settings = {}
 
 loadScript("/SCRIPTS/helper/widgets.lua")()
-loadScript("/SCRIPTS/helper/zstSettings.lua")()
+loadScript("/SCRIPTS/helper/ztsSettings.lua")()
 
 local shared = {}
 shared.screens = {
@@ -28,7 +28,7 @@ local function init()
         settings = readSettingsFile(settings, settingFilePath, true)
     end
 
-    if settings.zts.pages.output == 1 then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/outputs.lua" end
+    if settingEnabled(settings.zts, {"pages", "output"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/outputs.lua" end
 
     shared.current = 1
     shared.changeScreen(0)

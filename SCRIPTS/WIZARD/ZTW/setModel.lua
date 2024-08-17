@@ -1,5 +1,5 @@
-loadScript("/SCRIPTS/WIZARD/car/modelSettings.lua")()
-loadScript("/SCRIPTS/helper/zstSettings.lua", 'tc')()
+loadScript("/SCRIPTS/WIZARD/ZTW/modelSettings.lua")()
+loadScript("/SCRIPTS/helper/ztsSettings.lua", 'tc')()
 local zstSettings = {}
 local modelSettings = {}
 local modelFileName = model.getInfo().filename

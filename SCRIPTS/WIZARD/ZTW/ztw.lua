@@ -5,7 +5,7 @@ zstSettings["model"] = {language = 0, type = 0, ZTS = 0, sWarning = 1, modul = 0
 
 modelSettings = {}
 
-loadScript("/SCRIPTS/helper/zstSettings.lua", 'tc')()
+loadScript("/SCRIPTS/helper/ztsSettings.lua", 'tc')()
 
 local function init()
     settingFilePath = "/MODELS/ZTS/" .. string.gsub(model.getInfo().filename, ".yml", "") .. ".txt"
@@ -21,8 +21,8 @@ local function init()
     --printSettings(zstSettings, 0)
 
     loadScript("/SCRIPTS/helper/widgets.lua", 'tc')()
-    loadScript("/SCRIPTS/WIZARD/car/ui.lua", 'tc')()
-    loadScript("/SCRIPTS/WIZARD/car/pages.lua", 'tc')()
+    loadScript("/SCRIPTS/WIZARD/ZTW/ui.lua", 'tc')()
+    loadScript("/SCRIPTS/WIZARD/ZTW/pages.lua", 'tc')()
 
     --print("car.lua after pages")
     --printSettings(zstSettings, 0)

@@ -223,7 +223,7 @@ local function runFieldsPage(event)
         if fields[current].value == "createModel" then
             saveSettings("/MODELS/ZTS/" .. string.gsub(model.getInfo().filename, ".yml", "") .. ".txt", zstSettings)
 
-            return "/SCRIPTS/WIZARD/car/setSettings.lua"
+            return "/SCRIPTS/WIZARD/ZTW/setSettings.lua"
         end
     -- toggle editing/selecting current field
     elseif event == EVT_VIRTUAL_ENTER then
@@ -249,7 +249,7 @@ local function runFieldsPage(event)
             end
         end
         if fields[current].reinit == 1 then
-            loadScript("/SCRIPTS/WIZARD/car/pages.lua", 'tc')()
+            loadScript("/SCRIPTS/WIZARD/ZTW/pages.lua", 'tc')()
             initUI(startPage)
         end
     elseif edit then

@@ -1,4 +1,4 @@
-loadScript("/SCRIPTS/helper/zstSettings.lua", 'tc')()
+loadScript("/SCRIPTS/helper/ztsSettings.lua", 'tc')()
 local zstSettings = {}
 local modelSettings = {}
 local modelFileName = model.getInfo().filename
