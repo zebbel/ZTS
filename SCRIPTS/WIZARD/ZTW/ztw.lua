@@ -1,0 +1,50 @@
+version = "V0.0.0"
+-- ZTS settings
+zstSettings = {}
+zstSettings["model"] = {language = 0, type = 0, ZTS = 0, sWarning = 1, modul = 0}
+
+modelSettings = {}
+
+loadScript("/SCRIPTS/helper/zstSettings.lua", 'tc')()
+
+local function init()
+    settingFilePath = "/MODELS/ZTS/" .. string.gsub(model.getInfo().filename, ".yml", "") .. ".txt"
+
+    if fileExists("/MODELS/ZTS") then
+        folderExists = true
+        if fileExists(settingFilePath) then
+            zstSettings = readSettingsFile(zstSettings, settingFilePath, true)
+        end
+    end
+
+    print("car.lua")
+    --printSettings(zstSettings, 0)
+
+    loadScript("/SCRIPTS/helper/widgets.lua", 'tc')()
+    loadScript("/SCRIPTS/WIZARD/car/ui.lua", 'tc')()
+    loadScript("/SCRIPTS/WIZARD/car/pages.lua", 'tc')()
+
+    --print("car.lua after pages")
+    --printSettings(zstSettings, 0)
+
+    if fileExists("/MODELS/ZTS") then
+        folderExists = true
+        if fileExists(settingFilePath) then
+            zstSettings = getSettings(zstSettings, settingFilePath, true)
+        end
+    end
+
+    --print("car.lua befor initUI")
+    --printSettings(zstSettings, 0)
+
+    initUI(startPage)
+end
+
+local result = 0
+local function run(event)
+    result = runUI(event)
+
+    return result
+end
+
+return { init=init, run=run }
