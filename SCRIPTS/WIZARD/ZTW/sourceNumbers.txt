@@ -1,0 +1,35 @@
+lcd.drawSource()
+0 = none
+1-32 = input 1-32
+33-74 = LUA1a - LUA7f
+75-86 = analog Input 0-11 (sticks/S1 usw)
+87 = MIN
+88 = MAX
+89-91 = CYC1 - CYC3
+92-97 = trims
+98-103 = SA-SF
+104-117 crashes companion
+118-181 = L01 - L64
+182-197 = TR1 - TR16
+198-229 = output 0-31
+230-238 = G1 - G9
+
+
+
+lcd.drawSwitch()
+0 = none
+1-19 = SA - SF (SA(up), SA(mid), SA(down))
+20-... crashes companion
+
+
+
+model.setLogicalSwitch()
+1-72 = SA - SF (if up middel down depents on switch setting) numbering is also depending on switch setting. Needs more investigation
+109-116 = Trim0+ - Trim4- (Trim+, Trim-)
+121-184 = L01-64
+
+
+
+model.setCustomFunction()
+agjust gvar:
+92-95 = trims

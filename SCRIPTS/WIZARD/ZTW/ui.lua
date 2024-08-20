@@ -8,10 +8,14 @@ CHECKBOX = 7
 FUNCTION = 8
 SUBMENU = 9
 
+TEST = 99
+
 
 
 local edit = false
+local longEnterPress = false
 local page = 1
+local savePage = page
 local pages = {}
 local loadPage = "page"
 local pageOffset = 0
@@ -85,6 +89,11 @@ local function loadPages(pagesTabel)
         end
     end
 
+    if page > #pages then 
+        savePage = page
+        page = #pages 
+    end
+
     fields = pages[page]
 
     if fields[current].type == TEXT then
@@ -96,7 +105,10 @@ end
 local function addField(step)
     local field = fields[current]
     local min, max
-    if field.type == TRIM then
+    if field.type == TEST then
+        min = 0
+        max = 300
+    elseif field.type == TRIM then
         min = 92
         max = 97
     elseif field.type == CHANNEL then
@@ -112,6 +124,7 @@ local function addField(step)
 
     local value = getFieldValue(field)
     if (step < 0 and value > min) or (step > 0 and value < max) then
+        print(value+step)
         setFieldValue(field, value + step)
     end
 end
@@ -175,7 +188,9 @@ local function redrawFieldPage()
 
         local yOffset = 7
 
-        if field.type == CHANNEL then
+        if field.type == TEST then
+            lcd.drawSwitch(LCD_W - 29, (spacing * index) + yOffset, value, attr)
+        elseif field.type == CHANNEL then
             lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
             lcd.drawSource(LCD_W - 29, (spacing * index) + yOffset, MIXSRC_CH1+value, attr)
         elseif field.type == TRIM then
@@ -207,7 +222,6 @@ local function redrawFieldPage()
     end
 end
 
-local longEnterPress = false
 local function runFieldsPage(event)
     if longEnterPress then
         if event == 34 then longEnterPress = false end
@@ -215,6 +229,7 @@ local function runFieldsPage(event)
     elseif event == EVT_VIRTUAL_EXIT then
         if loadPage ~= "page" then 
             loadPage = "page"
+            page = savePage
             loadPages(startPage)
         else 
             return 2 
@@ -287,11 +302,13 @@ function runUI(event)
         return 2
     elseif event == EVT_VIRTUAL_NEXT_PAGE and edit == false then
         selectPage(1)
+        return runFieldsPage(event)
     elseif event == EVT_VIRTUAL_PREV_PAGE and edit == false then
         selectPage(-1)
+        return runFieldsPage(event)
     elseif event == 1541 then
         return 2
+    else
+        return runFieldsPage(event)
     end
-
-    return runFieldsPage(event)
 end

@@ -10,6 +10,7 @@ end
 modelSetup = {
     pageName = language.setupPage,
     page = {
+        --{enable=1, name = "test", type=TEST, settingTable="test", value="testValue"},
         {enable=1, name = language.language, type=COMBO, settingTable="model", value="language", options={"english", "Deutsch"}, reinit=1},
         {enable=1, name = language.modelType, type=COMBO, settingTable="model", value="type", options={language.car, language.bike, language.crawler}, reinit=1},
         {enable=1, name=language.ztsOption, type=CHECKBOX, settingTable="model", value="ZTS", reinit=1}
