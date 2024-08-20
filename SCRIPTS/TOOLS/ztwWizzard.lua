@@ -1,5 +1,5 @@
 
-local toolName = "TNS|car Wizard|TNE"
+local toolName = "TNS|ZTW|TNE"
 
 local function init() 
 end
