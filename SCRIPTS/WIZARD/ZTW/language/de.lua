@@ -1,5 +1,8 @@
 
 language = {
+    alarm = "Alarm",
+    enable = "enable",
+    maxTemp = "max Temperatur",
     setupPage = "Einstellungen",
     language = "Sprache:",
     modelType = "Modell Typ:",
@@ -27,13 +30,11 @@ language = {
     confirm1 = "Modell Daten",
     confirm2 = "werden überschrieben!",
     confirm = "[Enter lange] anwenden",
-    temperature = "Temperatur",
     ztsOptions = "ZTS Optionen",
     batIndicator = "Batterie Anzeige?",
-    batAlarm = "Alarm",
     minCell = "min Zellen V",
     sensorReplace = "Sensor ersetzen?",
-    sensors = "Sensoren",
+    ztmTempSensor = "Temperatursensor",
     sensorAllocation = "Sensor zuweisung",
     fourWS = "4WS",
     assignChanelRearSteer = "Kanal hinten:",
@@ -42,5 +43,6 @@ language = {
     crabSteer = "crab Schalter",
     ztsPages = "zts Seiten Einstellungen",
     ztsOutputPage = "Ausgänge",
-    ztmPage = "ZTM Einstellungen"
+    ztmPage = "ZTM Einstellungen",
+    sensor = "Sensor"
 }

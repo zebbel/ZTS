@@ -41,12 +41,18 @@ function shared.init()
 end
 
 function shared.background()
-    if settingEnabled(settings.zts, {"batIndicator", "alarm"}) then
-        if getRSSI() ~= 0 then
+    if getRSSI() ~= 0 then
+        if settingEnabled(settings.zts, {"batIndicator", "alarm"}) then
             cell = math.ceil((getValue('RxBt') / 4.37) - 0.4)
             cell = cell == (5 or 7) and cell + 1 or cell
 
             if getValue('RxBt') / cell <= settings.zts.batIndicator.minCell then
+                playHaptic(10, 500)
+            end
+        end
+
+        if settingEnabled(settings.ztm, {"sensorReplace", "sensors", "temp",     "alarm"}) then
+            if getValue(settings.ztm.sensorReplace.sensors.temp.id) > settings.ztm.sensorReplace.sensors.temp.maxTemp then
                 playHaptic(10, 500)
             end
         end
