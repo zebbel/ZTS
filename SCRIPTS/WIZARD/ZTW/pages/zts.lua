@@ -1,14 +1,5 @@
 zstSettings["zts"] = {
     batIndicator = 0, 
-    sensorReplace = {
-        enable = 0, 
-        sensors = {
-            temp = {
-                enable = 0, 
-                allocation = 0
-            }
-        }
-    },
     pages = {
         output = 0
     }
@@ -28,14 +19,6 @@ function getSensorTable()
     return sensors
 end
 
-ztsSensors = {
-    {enable=1, name=language.temperature, type=CHECKBOX, settingTable={"zts", "sensorReplace", "sensors", "temp"}, value="enable"},
-}
-
-ztsSensorAllocation = {
-    {enable={"zts", "sensorReplace", "sensors", "temp", "enable"}, name=language.temperature, type=COMBO, settingTable={"zts", "sensorReplace", "sensors", "temp"}, value="allocation", options=getSensorTable()}
-}
-
 ztsPages = {
     {enable=1, name=language.ztsOutputPage, type=CHECKBOX, settingTable={"zts", "pages"}, value="output"}
 }
@@ -45,10 +28,5 @@ ztsPage = {
     page = {
         {enable=1, name=language.batIndicator, type=CHECKBOX, settingTable="zts", value="batIndicator"},
         {enable=1, name=language.ztsPages, type=SUBMENU, value=0, submenu=ztsPages}
-    },
-    subpage = {
-        {enable=1, name=language.sensorReplace, type=CHECKBOX, settingTable={"zts", "sensorReplace"}, value="enable"},
-        {enable={"zts", "sensorReplace", "enable"}, name=language.sensors, type=SUBMENU, value=0, submenu=ztsSensors},
-        {enable={"zts", "sensorReplace", "enable"}, name=language.sensorAllocation, type=SUBMENU, value=0, submenu=ztsSensorAllocation}
     }
 }

@@ -16,6 +16,7 @@ modelSetup = {
         {enable=1, name=language.ztsOption, type=CHECKBOX, settingTable="model", value="ZTS", reinit=1}
     },
     subpage = {
+        {enable=1, name=language.ztmOption, type=CHECKBOX, settingTable="model", value="ZTM", reinit=1},
         {enable=1, name=language.switchWarning, type=CHECKBOX, settingTable="model", value="sWarning"},
         {enable=1, name=language.modul, type=COMBO, settingTable="model", value="modul", options={"---", "CRSF"}}
     }
@@ -49,5 +50,11 @@ if zstSettings.model.ZTS == 1 then
     loadScript("/SCRIPTS/WIZARD/ZTW/pages/zts.lua")()
     startPage[#startPage+1] = ztsPage
 end
+
+if zstSettings.model.ZTM == 1 then
+    loadScript("/SCRIPTS/WIZARD/ZTW/pages/ztm.lua")()
+    startPage[#startPage+1] = ztmPage
+end
+
 startPage[#startPage+1] = confirmPage
 

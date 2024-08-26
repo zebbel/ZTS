@@ -1,7 +1,7 @@
 version = "V0.0.0"
 -- ZTS settings
 zstSettings = {}
-zstSettings["model"] = {language = 0, type = 0, ZTS = 0, sWarning = 1, modul = 0}
+zstSettings["model"] = {language = 0, type = 0, ZTS = 0, sWarning = 1, modul = 0, ZTM = 0}
 
 modelSettings = {}
 

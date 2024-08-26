@@ -124,7 +124,7 @@ local function addField(step)
 
     local value = getFieldValue(field)
     if (step < 0 and value > min) or (step > 0 and value < max) then
-        print(value+step)
+        --print(value+step)
         setFieldValue(field, value + step)
     end
 end
@@ -230,6 +230,7 @@ local function runFieldsPage(event)
         if loadPage ~= "page" then 
             loadPage = "page"
             page = savePage
+            current = 1
             loadPages(startPage)
         else 
             return 2 

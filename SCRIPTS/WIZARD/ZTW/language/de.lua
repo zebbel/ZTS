@@ -7,6 +7,7 @@ language = {
     bike = "Motorrad",
     crawler = "Crawler",
     ztsOption = "ZTS benutzen",
+    ztmOption = "use ZTM",
     switchWarning = "deaktiv. S-Warning",
     modul = "Internes RF",
     steeringPage = "Lenkung",
@@ -38,5 +39,6 @@ language = {
     awsSteer = "AWS Schalter",
     crabSteer = "crab Schalter",
     ztsPages = "zts Seiten Einstellungen",
-    ztsOutputPage = "Ausgänge"
+    ztsOutputPage = "Ausgänge",
+    ztmPage = "ZTM Einstellungen"
 }

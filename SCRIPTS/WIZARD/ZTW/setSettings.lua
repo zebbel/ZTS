@@ -161,7 +161,7 @@ local function setCurves()
     curveTable["smooth"] = false
     curveTable["type"] = 1
 
-    if settingEnabled(zstSettings.brake, "servo") then
+    if settingEnabled(zstSettings.brake, "limit") or settingEnabled(zstSettings.brake, "balance") then
         curveTable["name"] = "TH"
         curveTable["x"] = {-100, -50, 0, 50, 100}
         curveTable["y"] = {0, 0, 0, 50, 100}
@@ -206,7 +206,7 @@ local function setInputs()
     end
     model.insertInput(steeringInput, 0, inputTable)
 
-    if settingEnabled(zstSettings.brake, "servo") then
+    if settingEnabled(zstSettings.brake, "limit") or settingEnabled(zstSettings.brake, "balance") then
         inputTable.inputName = "Th"
         inputTable.source = 76
         inputTable.weight = 100
@@ -256,7 +256,7 @@ local function setMixers()
     model.insertMix(0, 0, mixTabel)
     
     mixTabel.source = 2
-    if settingEnabled(zstSettings.brake, "servo") then
+    if settingEnabled(zstSettings.brake, "limit") or settingEnabled(zstSettings.brake, "balance") then
         mixTabel.curveType = 3
         mixTabel.curveValue = 1
     else
@@ -269,7 +269,7 @@ local function setMixers()
     end
     model.insertMix(1, 0, mixTabel)
 
-    if settingEnabled(zstSettings.brake, "servo") then
+    if settingEnabled(zstSettings.brake, "limit") or settingEnabled(zstSettings.brake, "balance") then
         mixTabel.source = 3
         mixTabel.curveType = 3
         mixTabel.curveValue = 2

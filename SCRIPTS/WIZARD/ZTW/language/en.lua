@@ -8,6 +8,7 @@ language = {
     crawler = "crawler",
     steeringPage = "Steering",
     ztsOption = "use ZTS",
+    ztmOption = "use ZTM",
     switchWarning = "disable S-Warning",
     modul = "internal RF",
     assignChanel = "Assign channel:",
@@ -38,5 +39,6 @@ language = {
     awsSteer = "aws steer switch",
     crabSteer = "crab steer switch",
     ztsPages = "manage zts pages",
-    ztsOutputPage = "Outputs"
+    ztsOutputPage = "Outputs",
+    ztmPage = "ZTM Settings"
 }
