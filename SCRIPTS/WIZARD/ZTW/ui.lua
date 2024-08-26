@@ -4,9 +4,10 @@ SWITCH = 3
 COMBO = 4
 COMBOBOX = 5
 TEXT = 6
-CHECKBOX = 7
-FUNCTION = 8
-SUBMENU = 9
+VALUE = 7
+CHECKBOX = 8
+FUNCTION = 9
+SUBMENU = 10
 
 TEST = 99
 
@@ -120,6 +121,9 @@ local function addField(step)
     elseif field.type == COMBO or field.type == COMBOBOX then
         min = 0
         max = #(field.options) - 1
+    elseif field.type == VALUE then
+        min = field.min
+        max = field.max
     end
 
     local value = getFieldValue(field)
@@ -208,6 +212,9 @@ local function redrawFieldPage()
             lcd.drawCombobox(LCD_W - 30, (spacing * index) + yOffset-2, 30, field.options, value, attr)
         elseif field.type == TEXT then
             lcd.drawText(64, (spacing * index) + yOffset, field.name, CENTER + attr)
+        elseif field.type == VALUE then
+            lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
+            lcd.drawText(LCD_W - 29, (spacing * index) + yOffset, value, LEFT + attr)
         elseif field.type == CHECKBOX then
             lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
             drawCheckbox(LCD_W - 30, ((spacing * index) + yOffset)-1, value, attr)
@@ -270,9 +277,11 @@ local function runFieldsPage(event)
         end
     elseif edit then
         if event == EVT_VIRTUAL_INC or event == EVT_VIRTUAL_INC_REPT then
-            addField(1)
+            if fields[current].type == VALUE then addField(fields[current].step)
+            else addField(1) end
         elseif event == EVT_VIRTUAL_DEC or event == EVT_VIRTUAL_DEC_REPT then
-            addField(-1)
+            if fields[current].type == VALUE then addField(fields[current].step * -1)
+            else addField(-1) end
         end
     else
         if event == EVT_VIRTUAL_NEXT then

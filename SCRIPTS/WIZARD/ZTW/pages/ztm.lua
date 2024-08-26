@@ -4,7 +4,7 @@ zstSettings["ztm"] = {
         sensors = {
             temp = {
                 enable = 0, 
-                allocation = 0
+                allocation = 22
             }
         }
     }
