@@ -204,6 +204,7 @@ local function redrawFieldPage()
             lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
             lcd.drawSwitch(LCD_W - 29, (spacing * index) + yOffset, value, attr)
         elseif field.type == COMBO then
+            if value > #field.options then value = 0 end
             lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
             width = (#field.options[value + 1] + 1) * charWidth
             lcd.drawText(LCD_W - width, (spacing * index) + yOffset, field.options[value + 1], LEFT + attr)
