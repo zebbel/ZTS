@@ -1,3 +1,6 @@
 BACKUP/*.yml
 *.luac
 model*.txt
+
+modelSettings.luac
+modelTable.lua

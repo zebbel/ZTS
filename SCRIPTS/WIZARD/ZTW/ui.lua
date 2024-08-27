@@ -1,3 +1,4 @@
+-- give field types a name
 CHANNEL = 1
 SOURCE = 2
 SWITCH = 3
@@ -9,10 +10,7 @@ CHECKBOX = 8
 FUNCTION = 9
 SUBMENU = 10
 
-TEST = 99
-
-
-
+-- init local variables
 local edit = false
 local longEnterPress = false
 local page = 1
@@ -27,6 +25,7 @@ local baseAttr = 0
 local spacing = 10
 local charWidth = 6
 
+-- get value of given field
 local function getFieldValue(field)
     if type(field.settingTable) == "table" then
         local sub = field.settingTable
@@ -40,6 +39,7 @@ local function getFieldValue(field)
     return value
 end
 
+-- set value of given field
 local function setFieldValue(field, value)
     if type(field.settingTable) == "table" then
         local sub = field.settingTable
@@ -51,6 +51,7 @@ local function setFieldValue(field, value)
     end
 end
 
+-- check if field is visible
 local function fieldEnabled(field)
     local settingTable = ztsSettings
     for index=1, #field.enable, 1 do settingTable = settingTable[field.enable[index]] end
@@ -59,6 +60,7 @@ local function fieldEnabled(field)
     return false
 end
 
+-- load sub menu and add sub menu fields to fields variable
 local function loadSubmenu(pagesContent, submenuTable)
     for index=1, #submenuTable, 1 do
         local entry = submenuTable[index]
@@ -68,6 +70,7 @@ local function loadSubmenu(pagesContent, submenuTable)
     end
 end
 
+-- load pages to pages variable and reload fields
 local function loadPages(pagesTabel)
     pageOffset = 0
     pages = {}
@@ -192,9 +195,7 @@ local function redrawFieldPage()
 
         local yOffset = 7
 
-        if field.type == TEST then
-            lcd.drawSwitch(LCD_W - 29, (spacing * index) + yOffset, value, attr)
-        elseif field.type == CHANNEL then
+        if field.type == CHANNEL then
             lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
             lcd.drawSource(LCD_W - 29, (spacing * index) + yOffset, MIXSRC_CH1+value, attr)
         elseif field.type == TRIM then
@@ -230,7 +231,8 @@ local function redrawFieldPage()
     end
 end
 
-local function runFieldsPage(event)
+-- run actuall page
+local function runPage(event)
     if longEnterPress then
         if event == 34 then longEnterPress = false end
     -- exit script
@@ -243,10 +245,13 @@ local function runFieldsPage(event)
         else 
             return 2 
         end
+    -- run functions
     elseif fields[current].type == FUNCTION and event == fields[current].key then
+        -- run createModel function
         if fields[current].value == "createModel" then
-            saveSettings("/MODELS/ZTS/" .. string.gsub(model.getInfo().filename, ".yml", "") .. ".txt", ztsSettings)
-
+            -- save model setting file
+            saveSettings(settingFilePath, ztsSettings)
+            -- close ui and apply settings to model
             return "/SCRIPTS/WIZARD/ZTW/setSettings.lua"
         end
     -- toggle editing/selecting current field
@@ -303,23 +308,25 @@ local function runFieldsPage(event)
     return 0
 end
 
+-- init UI
 function initUI(pagesInit)
     loadPages(pagesInit)
 end
 
+-- main ui run function
 function runUI(event)
     if event == nil then
         error("Cannot be run as a model script!")
         return 2
     elseif event == EVT_VIRTUAL_NEXT_PAGE and edit == false then
         selectPage(1)
-        return runFieldsPage(event)
+        return runPage(event)
     elseif event == EVT_VIRTUAL_PREV_PAGE and edit == false then
         selectPage(-1)
-        return runFieldsPage(event)
+        return runPage(event)
     elseif event == 1541 then
         return 2
     else
-        return runFieldsPage(event)
+        return runPage(event)
     end
 end

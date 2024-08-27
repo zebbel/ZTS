@@ -1,9 +1,13 @@
+-- cache model settings
 local zstModelSettings = ztsSettings.model
+-- clear ztsSettings in case model type was changed
 ztsSettings = {}
+-- reload model settings and init all other settings needed for model type crawler
 ztsSettings["model"] = zstModelSettings
 ztsSettings.steering = {output = 0, fourWS = 0, outputRear = 2, rearSteerSwitch = 2, awsSteerSwitch = 3, crabSteerSwitch = 9}
 ztsSettings.esc = {output = 1, arm = 0, armSwitch = 3}
 
+-- steering page
 steeringPage = {
     pageName = language.steeringPage,
     page = {
@@ -16,6 +20,7 @@ steeringPage = {
     }
 }
 
+-- esc page
 escPage = {
     pageName = language.escPage,
     page = {

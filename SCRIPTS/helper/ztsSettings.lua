@@ -216,10 +216,7 @@ end
 
 function saveSettings(filePath, settingTable)
     local file = io.open(filePath, "w")
-
     --printSettings(settingTable, 0)
-
     writeSettings(file, settingTable, 0)
-
     io.close(file)
 end

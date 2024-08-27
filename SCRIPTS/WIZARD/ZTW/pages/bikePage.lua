@@ -1,10 +1,14 @@
+-- cache model settings
 local zstModelSettings = ztsSettings.model
+-- clear ztsSettings in case model type was changed
 ztsSettings = {}
+-- reload model settings and init all other settings needed for model type bike
 ztsSettings["model"] = zstModelSettings
 ztsSettings["steering"] = {output = 0, DR = 0, drSwitch = 94, limit = 0, limitSwitch = 93}
 ztsSettings["esc"] = {output = 1, arm = 0, armSwitch = 12}
 ztsSettings["brake"] = {servo = 0, servoOutput = 2, limit = 1, limitSwitch = 95, balance = 0, balanceSwitch = 92}
 
+-- steering page
 steeringPage = {
     pageName = language.steeringPage,
     page = {
@@ -16,6 +20,7 @@ steeringPage = {
     }
 }
 
+-- esc page
 escPage = {
     pageName = language.escPage,
     page = {
@@ -25,6 +30,7 @@ escPage = {
     }
 }
 
+-- brake servo page
 brakeServoPage = {
     pageName = language.brakePage,
     page = {
