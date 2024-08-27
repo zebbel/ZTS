@@ -1,50 +1,35 @@
-version = "V0.0.0"
+version = "V0.0.2"
 -- ZTS settings
-zstSettings = {}
-zstSettings["model"] = {language = 0, type = 0, ZTS = 0, sWarning = 1, modul = 0, ZTM = 0}
-
-modelSettings = {}
+ztsSettings = {}
+-- init ztsSettings with base model settings
+ztsSettings["model"] = {language = 0, type = 0, ZTS = 0, sWarning = 1, modul = 0, ZTM = 0}
+-- get path of ztsSetting file
+settingFilePath = "/MODELS/ZTS/" .. string.gsub(model.getInfo().filename, ".yml", "") .. ".txt"
 
 loadScript("/SCRIPTS/helper/ztsSettings.lua", 'tc')()
+loadScript("/SCRIPTS/helper/widgets.lua", 'tc')()
+loadScript("/SCRIPTS/WIZARD/ZTW/ui.lua", 'tc')()
 
 local function init()
-    settingFilePath = "/MODELS/ZTS/" .. string.gsub(model.getInfo().filename, ".yml", "") .. ".txt"
-
-    if fileExists("/MODELS/ZTS") then
-        folderExists = true
-        if fileExists(settingFilePath) then
-            zstSettings = readSettingsFile(zstSettings, settingFilePath, true)
-        end
+    -- check if file exist and load settings so pages.lua knows what base settings are used for model
+    if fileExists(settingFilePath) then
+        ztsSettings = readSettingsFile(ztsSettings, settingFilePath, true)
     end
 
-    print("car.lua")
-    --printSettings(zstSettings, 0)
-
-    loadScript("/SCRIPTS/helper/widgets.lua", 'tc')()
-    loadScript("/SCRIPTS/WIZARD/ZTW/ui.lua", 'tc')()
+    -- load pages.lua (inits pages to be shown based on ztsSetting)
     loadScript("/SCRIPTS/WIZARD/ZTW/pages.lua", 'tc')()
 
-    --print("car.lua after pages")
-    --printSettings(zstSettings, 0)
-
-    if fileExists("/MODELS/ZTS") then
-        folderExists = true
-        if fileExists(settingFilePath) then
-            zstSettings = getSettings(zstSettings, settingFilePath, true)
-        end
+    -- reload ztsSettings to overwrite base settings with real settings
+    if fileExists(settingFilePath) then
+        ztsSettings = getSettings(ztsSettings, settingFilePath, true)
     end
 
-    --print("car.lua befor initUI")
-    --printSettings(zstSettings, 0)
-
+    -- init the ui
     initUI(startPage)
 end
 
-local result = 0
 local function run(event)
-    result = runUI(event)
-
-    return result
+    return runUI(event)
 end
 
 return { init=init, run=run }

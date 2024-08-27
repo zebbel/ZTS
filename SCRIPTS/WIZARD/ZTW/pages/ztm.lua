@@ -1,10 +1,11 @@
-zstSettings["ztm"] = {
+-- init ztm settings
+ztsSettings["ztm"] = {
     sensorReplace = {
         enable = 0, 
         sensors = {
             temp = {
                 enable = 0, 
-                allocation = 22,
+                allocation = 0,
                 alarm = 0,
                 maxTemp = 60
             }
@@ -12,6 +13,7 @@ zstSettings["ztm"] = {
     }
 }
 
+-- get table of availabe sensors
 function getSensorTable()
     local sensors = {}
     local x = 0
@@ -22,10 +24,12 @@ function getSensorTable()
         x = x + 1
     end
 
+    -- if no sensors are discoverd we need at least one entry
     if sensors[1] == nil then sensors = {"None"} end
     return sensors
 end
 
+-- ztmTempSensor sub menu
 ztmTempSensorMenu = {
     {enable=1, name=language.enable, type=CHECKBOX, settingTable={"ztm", "sensorReplace", "sensors", "temp"}, value="enable"},
     {enable={"ztm","sensorReplace","sensors","temp","enable"}, name=language.sensor, type=COMBO, settingTable={"ztm","sensorReplace","sensors","temp"}, value="allocation", options=getSensorTable()},
@@ -33,6 +37,7 @@ ztmTempSensorMenu = {
     {enable={"ztm","sensorReplace","sensors","temp","alarm"}, name=language.maxTemp, type=VALUE, min=0, max=100, step=1, settingTable={"ztm","sensorReplace","sensors","temp"}, value="maxTemp"}
 }
 
+-- ztm page
 ztmPage = {
     pageName = language.ztmPage,
     page = {
