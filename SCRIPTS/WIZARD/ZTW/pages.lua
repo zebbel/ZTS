@@ -33,16 +33,15 @@ confirmPage = {
     }
 }
 
-
 -- load pages based on model type
 if ztsSettings.model.type == 0 then
-    loadScript("/SCRIPTS/WIZARD/ZTW/pages/car.lua")()
+    loadScript("/SCRIPTS/WIZARD/ZTW/pages/types/car.lua")()
     startPage = {modelSetup, steeringPage, escPage, brakeServoPage}
 elseif ztsSettings.model.type == 1 then
-    loadScript("/SCRIPTS/WIZARD/ZTW/pages/bike.lua")()
+    loadScript("/SCRIPTS/WIZARD/ZTW/pages/types/bike.lua")()
     startPage = {modelSetup, steeringPage, escPage, brakeServoPage}
 elseif ztsSettings.model.type == 2 then
-    loadScript("/SCRIPTS/WIZARD/ZTW/pages/crawler.lua")()
+    loadScript("/SCRIPTS/WIZARD/ZTW/pages/types/crawler.lua")()
     startPage = {modelSetup, steeringPage, escPage}
 end
 
