@@ -1,7 +1,5 @@
 local shared = ...
 
-local modelName = model.getInfo().name
-
 local showMenuFlag = false
 edit = false
 field = 0
@@ -60,7 +58,6 @@ function shared.background()
 end
 
 function shared.run(event)
-    drawTitle("Setup", settings.esc.armSwitch)
     drawLink(2, 12)
     drawDriveMode(47, 12, CENTER + BOLD)
 

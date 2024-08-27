@@ -25,7 +25,6 @@ modelSetup = {
 confirmPage = {
     pageName = language.confirmPage,
     page = {
-        {enable=1, name="", type=TEXT},
         {enable=1, name=language.confirm1, type=TEXT},
         {enable=1, name=language.confirm2, type=TEXT},
         {enable=1, name=language.confirm, type=FUNCTION, key=EVT_VIRTUAL_ENTER_LONG, value="createModel"}
