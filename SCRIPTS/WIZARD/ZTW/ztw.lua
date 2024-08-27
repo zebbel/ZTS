@@ -1,7 +1,7 @@
 version = "V0.0.2"
 -- ZTS settings
-zstSettings = {}
-zstSettings["model"] = {language = 0, type = 0, ZTS = 0, sWarning = 1, modul = 0, ZTM = 0}
+ztsSettings = {}
+ztsSettings["model"] = {language = 0, type = 0, ZTS = 0, sWarning = 1, modul = 0, ZTM = 0}
 
 modelSettings = {}
 
@@ -13,29 +13,29 @@ local function init()
     if fileExists("/MODELS/ZTS") then
         folderExists = true
         if fileExists(settingFilePath) then
-            zstSettings = readSettingsFile(zstSettings, settingFilePath, true)
+            ztsSettings = readSettingsFile(ztsSettings, settingFilePath, true)
         end
     end
 
     print("car.lua")
-    --printSettings(zstSettings, 0)
+    --printSettings(ztsSettings, 0)
 
     loadScript("/SCRIPTS/helper/widgets.lua", 'tc')()
     loadScript("/SCRIPTS/WIZARD/ZTW/ui.lua", 'tc')()
     loadScript("/SCRIPTS/WIZARD/ZTW/pages.lua", 'tc')()
 
     --print("car.lua after pages")
-    --printSettings(zstSettings, 0)
+    --printSettings(ztsSettings, 0)
 
     if fileExists("/MODELS/ZTS") then
         folderExists = true
         if fileExists(settingFilePath) then
-            zstSettings = getSettings(zstSettings, settingFilePath, true)
+            ztsSettings = getSettings(ztsSettings, settingFilePath, true)
         end
     end
 
     --print("car.lua befor initUI")
-    --printSettings(zstSettings, 0)
+    --printSettings(ztsSettings, 0)
 
     initUI(startPage)
 end

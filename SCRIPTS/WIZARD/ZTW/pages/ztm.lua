@@ -1,4 +1,4 @@
-zstSettings["ztm"] = {
+ztsSettings["ztm"] = {
     sensorReplace = {
         enable = 0, 
         sensors = {

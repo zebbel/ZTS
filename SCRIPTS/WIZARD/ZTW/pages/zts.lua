@@ -1,4 +1,4 @@
-zstSettings["zts"] = {
+ztsSettings["zts"] = {
     batIndicator = {
         enable = 0,
         alarm = 0,

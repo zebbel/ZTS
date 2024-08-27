@@ -1,9 +1,9 @@
-local zstModelSettings = zstSettings.model
-zstSettings = {}
-zstSettings["model"] = zstModelSettings
-zstSettings["steering"] = {output = 0, DR = 0, drSwitch = 94, limit = 0, limitSwitch = 93}
-zstSettings["esc"] = {output = 1, arm = 0, armSwitch = 12}
-zstSettings["brake"] = {servo = 0, servoOutput = 2, limit = 1, limitSwitch = 95, balance = 0, balanceSwitch = 92}
+local zstModelSettings = ztsSettings.model
+ztsSettings = {}
+ztsSettings["model"] = zstModelSettings
+ztsSettings["steering"] = {output = 0, DR = 0, drSwitch = 94, limit = 0, limitSwitch = 93}
+ztsSettings["esc"] = {output = 1, arm = 0, armSwitch = 12}
+ztsSettings["brake"] = {servo = 0, servoOutput = 2, limit = 1, limitSwitch = 95, balance = 0, balanceSwitch = 92}
 
 steeringPage = {
     pageName = language.steeringPage,

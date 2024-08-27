@@ -1,8 +1,8 @@
 
-if zstSettings.model.language ~= nil then
-    if zstSettings.model.language == 0 then
+if ztsSettings.model.language ~= nil then
+    if ztsSettings.model.language == 0 then
         loadScript("/SCRIPTS/WIZARD/ZTW/language/en.lua")()
-    elseif zstSettings.model.language == 1 then
+    elseif ztsSettings.model.language == 1 then
         loadScript("/SCRIPTS/WIZARD/ZTW/language/de.lua")()
     end
 end
@@ -32,25 +32,25 @@ confirmPage = {
 }
 
 --print("pages.lua")
---printSettings(zstSettings, 0)
+--printSettings(ztsSettings, 0)
 
-if zstSettings.model.type == 0 then
+if ztsSettings.model.type == 0 then
     loadScript("/SCRIPTS/WIZARD/ZTW/pages/carPage.lua")()
     startPage = {modelSetup, steeringPage, escPage, brakeServoPage}
-elseif zstSettings.model.type == 1 then
+elseif ztsSettings.model.type == 1 then
     loadScript("/SCRIPTS/WIZARD/ZTW/pages/bikePage.lua")()
     startPage = {modelSetup, steeringPage, escPage, brakeServoPage}
-elseif zstSettings.model.type == 2 then
+elseif ztsSettings.model.type == 2 then
     loadScript("/SCRIPTS/WIZARD/ZTW/pages/crawlerPage.lua")()
     startPage = {modelSetup, steeringPage, escPage}
 end
 
-if zstSettings.model.ZTS == 1 then
+if ztsSettings.model.ZTS == 1 then
     loadScript("/SCRIPTS/WIZARD/ZTW/pages/zts.lua")()
     startPage[#startPage+1] = ztsPage
 end
 
-if zstSettings.model.ZTM == 1 then
+if ztsSettings.model.ZTM == 1 then
     loadScript("/SCRIPTS/WIZARD/ZTW/pages/ztm.lua")()
     startPage[#startPage+1] = ztmPage
 end

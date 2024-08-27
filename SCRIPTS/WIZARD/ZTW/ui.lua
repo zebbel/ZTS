@@ -30,11 +30,11 @@ local charWidth = 6
 local function getFieldValue(field)
     if type(field.settingTable) == "table" then
         local sub = field.settingTable
-        value = zstSettings
+        value = ztsSettings
         for index=1, #sub, 1 do value = value[sub[index]] end
         value = value[field.value]
     elseif field.settingTable ~= nil then
-        value = zstSettings[field.settingTable][field.value]
+        value = ztsSettings[field.settingTable][field.value]
     end
 
     return value
@@ -43,16 +43,16 @@ end
 local function setFieldValue(field, value)
     if type(field.settingTable) == "table" then
         local sub = field.settingTable
-        local table = zstSettings
+        local table = ztsSettings
         for index=1, #sub, 1 do table = table[sub[index]] end
         table[field.value] = value
     elseif field.settingTable ~= nil then
-        zstSettings[field.settingTable][field.value] = value
+        ztsSettings[field.settingTable][field.value] = value
     end
 end
 
 local function fieldEnabled(field)
-    local settingTable = zstSettings
+    local settingTable = ztsSettings
     for index=1, #field.enable, 1 do settingTable = settingTable[field.enable[index]] end
     if settingTable == 1 then return true end
 
@@ -245,7 +245,7 @@ local function runFieldsPage(event)
         end
     elseif fields[current].type == FUNCTION and event == fields[current].key then
         if fields[current].value == "createModel" then
-            saveSettings("/MODELS/ZTS/" .. string.gsub(model.getInfo().filename, ".yml", "") .. ".txt", zstSettings)
+            saveSettings("/MODELS/ZTS/" .. string.gsub(model.getInfo().filename, ".yml", "") .. ".txt", ztsSettings)
 
             return "/SCRIPTS/WIZARD/ZTW/setSettings.lua"
         end

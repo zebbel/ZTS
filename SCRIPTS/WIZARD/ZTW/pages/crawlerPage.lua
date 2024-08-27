@@ -1,8 +1,8 @@
-local zstModelSettings = zstSettings.model
-zstSettings = {}
-zstSettings["model"] = zstModelSettings
-zstSettings.steering = {output = 0, fourWS = 0, outputRear = 2, rearSteerSwitch = 2, awsSteerSwitch = 3, crabSteerSwitch = 9}
-zstSettings.esc = {output = 1, arm = 0, armSwitch = 3}
+local zstModelSettings = ztsSettings.model
+ztsSettings = {}
+ztsSettings["model"] = zstModelSettings
+ztsSettings.steering = {output = 0, fourWS = 0, outputRear = 2, rearSteerSwitch = 2, awsSteerSwitch = 3, crabSteerSwitch = 9}
+ztsSettings.esc = {output = 1, arm = 0, armSwitch = 3}
 
 steeringPage = {
     pageName = language.steeringPage,
