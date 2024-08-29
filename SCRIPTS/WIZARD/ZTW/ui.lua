@@ -27,13 +27,12 @@ local charWidth = 6
 
 -- get value of given field
 local function getFieldValue(field)
-    if type(field.settingTable) == "table" then
-        local sub = field.settingTable
+    if type(field.setting) == "table" then
+        local sub = field.setting
         value = ztsSettings
         for index=1, #sub, 1 do value = value[sub[index]] end
-        value = value[field.value]
-    elseif field.settingTable ~= nil then
-        value = ztsSettings[field.settingTable][field.value]
+    elseif field.setting ~= nil then
+        value = ztsSettings[field.setting][field.value]
     end
 
     return value
@@ -41,13 +40,13 @@ end
 
 -- set value of given field
 local function setFieldValue(field, value)
-    if type(field.settingTable) == "table" then
-        local sub = field.settingTable
+    if type(field.setting) == "table" then
+        local sub = field.setting
         local table = ztsSettings
-        for index=1, #sub, 1 do table = table[sub[index]] end
-        table[field.value] = value
-    elseif field.settingTable ~= nil then
-        ztsSettings[field.settingTable][field.value] = value
+        for index=1, #sub-1, 1 do table = table[sub[index]] end
+        table[sub[#sub]] = value
+    elseif field.setting ~= nil then
+        ztsSettings[field.setting][field.value] = value
     end
 end
 

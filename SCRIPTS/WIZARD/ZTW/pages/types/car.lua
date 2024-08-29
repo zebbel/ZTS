@@ -12,11 +12,11 @@ ztsSettings["brake"] = {servo = 0, servoOutput = 2, limit = 1, limitSwitch = 95,
 steeringPage = {
     pageName = language.steeringPage,
     page = {
-        {enable=1, name=language.assignChanel, type=CHANNEL, settingTable="steering", value="output"},
-        {enable=1, name=language.drOption, type=CHECKBOX, settingTable="steering", value="DR"},
-        {enable={"steering", "DR"}, name=language.drSwitch, type=TRIM, settingTable="steering", value="drSwitch"},
-        {enable=1, name=language.limitOption, type=CHECKBOX, settingTable="steering", value="limit"},
-        {enable={"steering", "limit"}, name=language.limitSwitch, type=TRIM, settingTable="steering", value="limitSwitch"}
+        {enable=1, name=language.assignChanel, type=CHANNEL, setting={"steering","output"}},
+        {enable=1, name=language.drOption, type=CHECKBOX, setting={"steering","DR"}},
+        {enable={"steering", "DR"}, name=language.drSwitch, type=TRIM, setting={"steering","drSwitch"}},
+        {enable=1, name=language.limitOption, type=CHECKBOX, setting={"steering","limit"}},
+        {enable={"steering", "limit"}, name=language.limitSwitch, type=TRIM, setting={"steering","limitSwitch"}}
     }
 }
 
@@ -24,9 +24,9 @@ steeringPage = {
 escPage = {
     pageName = language.escPage,
     page = {
-        {enable=1, name=language.assignChanel, type=CHANNEL, settingTable="esc", value="output"},
-        {enable=1, name=language.armOption, type=CHECKBOX, settingTable="esc", value="arm"},
-        {enable={"esc", "arm"}, name=language.armSwitch, type=SWITCH, settingTable="esc", value="armSwitch"},
+        {enable=1, name=language.assignChanel, type=CHANNEL, setting={"esc","output"}},
+        {enable=1, name=language.armOption, type=CHECKBOX, setting={"esc","arm"}},
+        {enable={"esc", "arm"}, name=language.armSwitch, type=SWITCH, setting={"esc","armSwitch"}},
     }
 }
 
@@ -34,7 +34,7 @@ escPage = {
 brakeServoPage = {
     pageName = language.brakePage,
     page = {
-        {enable=1, name=language.limitOption, type=CHECKBOX, settingTable="brake", value="limit"},
-        {enable={"brake", "limit"}, name=language.limitSwitch, type=TRIM, settingTable="brake", value="limitSwitch"}
+        {enable=1, name=language.limitOption, type=CHECKBOX, setting={"brake","limit"}},
+        {enable={"brake", "limit"}, name=language.limitSwitch, type=TRIM, setting={"brake","limitSwitch"}}
     }
 }

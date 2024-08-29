@@ -12,14 +12,14 @@ end
 modelSetup = {
     pageName = language.setupPage,
     page = {
-        {enable=1, name = language.language, type=COMBO, settingTable="model", value="language", options={"english", "Deutsch"}, reinit=1},
-        {enable=1, name = language.modelType, type=COMBO, settingTable="model", value="type", options={language.car, language.bike, language.crawler}, reinit=1},
-        {enable=1, name=language.ztsOption, type=CHECKBOX, settingTable="model", value="ZTS", reinit=1}
+        {enable=1, name = language.language, type=COMBO, setting={"model","language"}, options={"english", "Deutsch"}, reinit=1},
+        {enable=1, name = language.modelType, type=COMBO, setting={"model","type"}, options={language.car, language.bike, language.crawler}, reinit=1},
+        {enable=1, name=language.ztsOption, type=CHECKBOX, setting={"model","ZTS"}, reinit=1}
     },
     subpage = {
-        {enable=1, name=language.ztmOption, type=CHECKBOX, settingTable="model", value="ZTM", reinit=1},
-        {enable=1, name=language.switchWarning, type=CHECKBOX, settingTable="model", value="sWarning"},
-        {enable=1, name=language.modul, type=COMBO, settingTable="model", value="modul", options={"---", "CRSF"}}
+        {enable=1, name=language.ztmOption, type=CHECKBOX, setting={"model","ZTM"}, reinit=1},
+        {enable=1, name=language.switchWarning, type=CHECKBOX, setting={"model","sWarning"}},
+        {enable=1, name=language.modul, type=COMBO, setting={"model","modul"}, options={"---", "CRSF"}}
     }
 }
 
