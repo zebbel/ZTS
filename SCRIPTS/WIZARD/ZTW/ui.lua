@@ -31,8 +31,6 @@ local function getFieldValue(field)
         local sub = field.setting
         value = ztsSettings
         for index=1, #sub, 1 do value = value[sub[index]] end
-    elseif field.setting ~= nil then
-        value = ztsSettings[field.setting][field.value]
     end
 
     return value
@@ -45,8 +43,6 @@ local function setFieldValue(field, value)
         local table = ztsSettings
         for index=1, #sub-1, 1 do table = table[sub[index]] end
         table[sub[#sub]] = value
-    elseif field.setting ~= nil then
-        ztsSettings[field.setting][field.value] = value
     end
 end
 
