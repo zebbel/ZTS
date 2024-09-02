@@ -46,7 +46,7 @@ local function drawBrake()
 
     if settingEnabled(settings.brake, "limit") then brakeLimit = model.getGlobalVariable(2, driveMode) end
 
-    lcd.drawText(2, yPos, "Brake", SMLSIZE)
+    lcd.drawText(2, yPos, "ESC", SMLSIZE)
 
     if settingEnabled(settings.brake, "balance") then
         brakeBalance = model.getGlobalVariable(3, driveMode)

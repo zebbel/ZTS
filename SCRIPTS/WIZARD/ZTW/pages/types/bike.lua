@@ -36,7 +36,7 @@ brakeServoPage = {
     page = {
         {enable=1, name=language.brakeServoOption, type=CHECKBOX, setting={"brake","servo"}},
         {enable={"brake", "servo"}, name=language.assignChanel, type=CHANNEL, setting={"brake","servoOutput"}},
-        {enable=1, name=language.limitOption, type=CHECKBOX, setting={"brake",}, value="limit"},
+        {enable=1, name=language.limitOption, type=CHECKBOX, setting={"brake","limit"}},
         {enable={"brake", "limit"}, name=language.limitSwitch, type=TRIM, setting={"brake","limitSwitch"}},
         {enable=1, name=language.brakeBalanceOption, type=CHECKBOX, setting={"brake","balance"}},
         {enable={"brake", "balance"}, name=language.brakeBalanceSwitch, type=TRIM, setting={"brake","balanceSwitch"}}
