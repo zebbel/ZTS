@@ -26,6 +26,8 @@ local function init()
 
     -- init the ui
     initUI(startPage)
+
+    print(model.getCustomFunction(4).param)
 end
 
 local function run(event)

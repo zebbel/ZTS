@@ -69,11 +69,12 @@ local function checkGlobalVariable(gv, dm, value)
     end
 end
 
-local function setSpecialFunction(switch, value, gvar, functionNum)
+local function setSpecialFunction(switch, value, gvar, mode, functionNum)
     local customFunctionTable = {switch = 185, func = FUNC_ADJUST_GVAR, name = nil, value = 94, mode = 1, param = 0, active = 1}
     customFunctionTable.switch = switch
     customFunctionTable.value = value
     customFunctionTable.param = gvar
+    customFunctionTable.mode = mode
     model.setCustomFunction(functionNum, customFunctionTable)
 end
 
@@ -87,31 +88,31 @@ local function setSpecialFunctions()
     local customFunctionTable = {switch = 185, func = FUNC_ADJUST_GVAR, name = nil, value = 94, mode = 1, param = 0, active = 1}
 
     if settingEnabled(ztsSettings.steering, "limit") then
-        setSpecialFunction(185, ztsSettings.steering.limitSwitch, 0, specialFunctionNum)
+        setSpecialFunction(185, ztsSettings.steering.limitSwitch, 0, 1, specialFunctionNum)
         specialFunctionNum = specialFunctionNum + 1
         checkGlobalVariable(0, 0, 100)
-    else
-        deleteSpecialFunction(0)
     end
     if settingEnabled(ztsSettings.steering, "DR") then
-        setSpecialFunction(185, ztsSettings.steering.drSwitch, 1, specialFunctionNum)
+        setSpecialFunction(185, ztsSettings.steering.drSwitch, 1, 1, specialFunctionNum)
         specialFunctionNum = specialFunctionNum + 1
-    else
-        deleteSpecialFunction(1)
     end
 
     if settingEnabled(ztsSettings.brake, "limit") then
-        setSpecialFunction(185, ztsSettings.brake.limitSwitch, 2, specialFunctionNum)
+        setSpecialFunction(185, ztsSettings.brake.limitSwitch, 2, 1, specialFunctionNum)
         specialFunctionNum = specialFunctionNum + 1
         checkGlobalVariable(2, 0, 100)
-    else
-        deleteSpecialFunction(2)
     end
     if settingEnabled(ztsSettings.brake, "balance") then
-        setSpecialFunction(185, ztsSettings.brake.balanceSwitch, 3, specialFunctionNum)
+        setSpecialFunction(185, ztsSettings.brake.balanceSwitch, 3, 1, specialFunctionNum)
         specialFunctionNum = specialFunctionNum + 1
-    else
-        deleteSpecialFunction(3)
+    end
+    if settingEnabled(ztsSettings.esc.limit, "enable") and ztsSettings.esc.limit.mode == 1 then
+        setSpecialFunction(10, 50, 4, 0, specialFunctionNum)
+        specialFunctionNum = specialFunctionNum + 1
+        setSpecialFunction(11, 75, 4, 0, specialFunctionNum)
+        specialFunctionNum = specialFunctionNum + 1
+        setSpecialFunction(12, 100, 4, 0, specialFunctionNum)
+        specialFunctionNum = specialFunctionNum + 1
     end
 
     if settingEnabled(ztsSettings.esc, "arm") then
@@ -137,7 +138,19 @@ end
 
 local function setFlightModes()
     local flightModeTable = {}
-    if settingEnabled(ztsSettings.steering, "fourWS") then
+    if settingEnabled(ztsSettings.esc.limit, "enable") and ztsSettings.esc.limit.mode == 0 then
+        flightModeTable.switch = 0
+        model.setFlightMode(0, flightModeTable)
+        model.setGlobalVariable(4, 0, 50)
+
+        flightModeTable.switch = 11
+        model.setFlightMode(1, flightModeTable)
+        model.setGlobalVariable(4, 1, 75)
+
+        flightModeTable.switch = 12
+        model.setFlightMode(2, flightModeTable)
+        model.setGlobalVariable(4, 2, 100)
+    elseif settingEnabled(ztsSettings.steering, "fourWS") then
         flightModeTable.name = "front"
         flightModeTable.switch = 0
         model.setFlightMode(0, flightModeTable)
@@ -209,29 +222,21 @@ local function setInputs()
     if settingEnabled(ztsSettings.brake, "limit") or settingEnabled(ztsSettings.brake, "balance") then
         inputTable.inputName = "Th"
         inputTable.source = 76
-        inputTable.weight = 100
+        if settingEnabled(ztsSettings.esc.limit, "enable") then inputTable.weight = -124 else inputTable.weight = 100 end
         inputTable.curveType = 0
         inputTable.curveValue = 0
         model.insertInput(throttelInput, 0, inputTable)
 
         inputTable.inputName = "RBR"
         inputTable.source = 76
-        if settingEnabled(ztsSettings.brake, "limit") then
-            inputTable.weight = -126
-        else
-            inputTable.weight = 100
-        end
+        if settingEnabled(ztsSettings.brake, "limit") then inputTable.weight = -126 else inputTable.weight = 100 end
         inputTable.curveType = 0
-        if settingEnabled(ztsSettings.brake, "balance") then
-            inputTable.curveValue = -125
-        else
-            inputTable.curveValue = 0
-        end
+        if settingEnabled(ztsSettings.brake, "balance") then inputTable.curveValue = -125 else inputTable.curveValue = 0 end
         model.insertInput(escBrakeInput, 0, inputTable)
     else
         inputTable.inputName = "Th"
         inputTable.source = 76
-        inputTable.weight = 100
+        if settingEnabled(ztsSettings.esc.limit, "enable") then inputTable.weight = -124 else inputTable.weight = 100 end
         inputTable.curveType = 0
         inputTable.curveValue = 0
         model.insertInput(throttelInput, 0, inputTable)

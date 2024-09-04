@@ -32,10 +32,13 @@ local function init()
         settingFileError = true
     end
 
-    if settingEnabled(settings.zts, {"pages", "output"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/outputs.lua" end
+    if settingEnabled(settings.zts, {"pages", "esc"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/esc.lua" end
+    if settingEnabled(settings.zts, {"pages", "steering"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/steering.lua" end
 
     shared.current = 1
     shared.changeScreen(0)
+
+    print(model.getFlightMode(1).switch)
 end
 
 local function background()

@@ -120,6 +120,29 @@ function drawLimitOffsetGauge(x, y, w, h, min, max, limit, offset, val)
     lcd.drawFilledRectangle(xStart, y + 1, width, h - 2)
 end
 
+function drawLimitOffsetGaugeSplit(x, y, w, h, limitLeft, limitRight, offsetLeft, offsetRight, val, side)
+    lcd.drawRectangle(x, y, w, h)
+
+    local barVal = math.ceil((w/2) / 100 * val)
+    if barVal > 1 or barVal < -1 then
+        lcd.drawLine((w/2)+x, y-2, (w/2)+x, y+h+1, SOLID, 0)
+        if barVal > 0 then
+            barVal = barVal -1
+        end
+    end
+    lcd.drawLine((w/2)+x+barVal, y-2, (w/2)+x+barVal, y+h+1, SOLID, 0)
+    lcd.drawLine(x-1, y-2, x-1, y+h+1, SOLID, 0)
+    lcd.drawLine(x+w, y-2, x+w, y+h+1, SOLID, 0)
+
+    local width = ((w/2) / 100) * (((limitLeft / 100) * ((100-offsetLeft) / 100)) * 100)
+    local xStart = x + ((w / 2) - width) + 1
+    lcd.drawFilledRectangle(xStart, y + 1, width, h-2)
+
+    local width = ((w/2) / 100) * (((limitRight / 100) * ((100-offsetRight) / 100)) * 100)
+    local xStart = x + (w / 2)
+    lcd.drawFilledRectangle(xStart, y + 1, width-1, h-2)
+end
+
 function drawRelationNumber(x, y, min, max, relation)
     if min < 0 then
         max = max + math.abs(min)
@@ -129,9 +152,9 @@ function drawRelationNumber(x, y, min, max, relation)
     local frontRatio = (100 / max) * relation
     local backRatio = 100 - frontRatio
 
-    lcd.drawNumber(x+10, y, backRatio, SMLSIZE + RIGHT)
-    lcd.drawText(x+12, y, "/", SMLSIZE)
-    lcd.drawNumber(x+19, y, frontRatio, SMLSIZE)
+    lcd.drawNumber(x+10, y, backRatio, RIGHT)
+    lcd.drawText(x+12, y, "/")
+    lcd.drawNumber(x+19, y, frontRatio)
 end
 
 function drawDriveMode(x, y)

@@ -11,8 +11,8 @@ ztsSettings.esc = {output = 1, arm = 0, armSwitch = 3}
 steeringPage = {
     pageName = language.steeringPage,
     page = {
-        {enable=1, name=language.assignChanel, type=CHANNEL, setting={"steering","output"}},
-        {enable=1, name=language.fourWS, type=CHECKBOX, setting={"steering","fourWS"}},
+        {name=language.assignChanel, type=CHANNEL, setting={"steering","output"}},
+        {name=language.fourWS, type=CHECKBOX, setting={"steering","fourWS"}},
         {enable={"steering", "fourWS"}, name=language.assignChanelRearSteer, type=CHANNEL, setting={"steering","outputRear"}},
         {enable={"steering", "fourWS"}, name=language.rearSteer, type=SWITCH, setting={"steering","rearSteerSwitch"}},
         {enable={"steering", "fourWS"}, name=language.awsSteer, type=SWITCH, setting={"steering","awsSteerSwitch"}},
@@ -24,8 +24,8 @@ steeringPage = {
 escPage = {
     pageName = language.escPage,
     page = {
-        {enable=1, name=language.assignChanel, type=CHANNEL, setting={"esc","output"}},
-        {enable=1, name=language.armOption, type=CHECKBOX, setting={"esc","arm"}},
+        {name=language.assignChanel, type=CHANNEL, setting={"esc","output"}},
+        {name=language.armOption, type=CHECKBOX, setting={"esc","arm"}},
         {enable={"esc", "arm"}, name=language.armSwitch, type=SWITCH, setting={"esc","armSwitch"}},
     }
 }

@@ -31,7 +31,7 @@ end
 
 -- ztmTempSensor sub menu
 ztmTempSensorMenu = {
-    {enable=1, name=language.enable, type=CHECKBOX, setting={"ztm", "sensorReplace", "sensors", "temp","enable"}},
+    {name=language.enable, type=CHECKBOX, setting={"ztm", "sensorReplace", "sensors", "temp","enable"}},
     {enable={"ztm","sensorReplace","sensors","temp","enable"}, name=language.sensor, type=COMBO, setting={"ztm","sensorReplace","sensors","temp","allocation"}, options=getSensorTable()},
     {enable={"ztm","sensorReplace","sensors","temp","enable"}, name=language.alarm, type=CHECKBOX, setting={"ztm","sensorReplace","sensors","temp","alarm"}},
     {enable={"ztm","sensorReplace","sensors","temp","alarm"}, name=language.maxTemp, type=VALUE, min=0, max=100, step=1, setting={"ztm","sensorReplace","sensors","temp","maxTemp"}}
@@ -41,7 +41,7 @@ ztmTempSensorMenu = {
 ztmPage = {
     pageName = language.ztmPage,
     page = {
-        {enable=1, name=language.sensorReplace, type=CHECKBOX, setting={"ztm", "sensorReplace","enable"}},
+        {name=language.sensorReplace, type=CHECKBOX, setting={"ztm", "sensorReplace","enable"}},
         {enable={"ztm", "sensorReplace", "enable"}, name=language.ztmTempSensor, type=SUBMENU, submenu=ztmTempSensorMenu}
     }
 }
