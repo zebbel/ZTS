@@ -1,4 +1,4 @@
-version = "V0.0.3"
+version = "V0.1.0"
 -- ZTS settings
 ztsSettings = {}
 -- init ztsSettings with base model settings
