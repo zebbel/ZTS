@@ -12,14 +12,14 @@ end
 modelSetup = {
     pageName = language.setupPage,
     page = {
-        {enable=1, name = language.language, type=COMBO, settingTable="model", value="language", options={"english", "Deutsch"}, reinit=1},
-        {enable=1, name = language.modelType, type=COMBO, settingTable="model", value="type", options={language.car, language.bike, language.crawler}, reinit=1},
-        {enable=1, name=language.ztsOption, type=CHECKBOX, settingTable="model", value="ZTS", reinit=1}
+        {name=language.language, type=COMBO, setting={"model","language"}, options={"english", "Deutsch"}, reload=1},
+        {name=language.modelType, type=COMBO, setting={"model","type"}, options={language.car, language.bike, language.crawler}, reinit=1},
+        {name=language.ztsOption, type=CHECKBOX, setting={"model","ZTS"}, reload=1}
     },
     subpage = {
-        {enable=1, name=language.ztmOption, type=CHECKBOX, settingTable="model", value="ZTM", reinit=1},
-        {enable=1, name=language.switchWarning, type=CHECKBOX, settingTable="model", value="sWarning"},
-        {enable=1, name=language.modul, type=COMBO, settingTable="model", value="modul", options={"---", "CRSF"}}
+        {name=language.ztmOption, type=CHECKBOX, setting={"model","ZTM"}, reload=1},
+        {name=language.switchWarning, type=CHECKBOX, setting={"model","sWarning"}},
+        {name=language.modul, type=COMBO, setting={"model","modul"}, options={"---", "CRSF"}}
     }
 }
 
@@ -27,9 +27,9 @@ modelSetup = {
 confirmPage = {
     pageName = language.confirmPage,
     page = {
-        {enable=1, name=language.confirm1, type=TEXT},
-        {enable=1, name=language.confirm2, type=TEXT},
-        {enable=1, name=language.confirm, type=FUNCTION, key=EVT_VIRTUAL_ENTER_LONG, value="createModel"}
+        {name=language.confirm1, type=TEXT},
+        {name=language.confirm2, type=TEXT},
+        {name=language.confirm, type=FUNCTION, key=EVT_VIRTUAL_ENTER_LONG, value="createModel"}
     }
 }
 

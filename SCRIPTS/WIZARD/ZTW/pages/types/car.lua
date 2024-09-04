@@ -5,28 +5,35 @@ ztsSettings = {}
 -- reload model settings and init all other settings needed for model type car
 ztsSettings["model"] = zstModelSettings
 ztsSettings["steering"] = {output = 0, DR = 0, drSwitch = 94, limit = 0, limitSwitch = 93}
-ztsSettings["esc"] = {output = 1, arm = 0, armSwitch = 12}
+ztsSettings["esc"] = {output = 1, arm = 0, armSwitch = 12, limit = 0}
 ztsSettings["brake"] = {servo = 0, servoOutput = 2, limit = 1, limitSwitch = 95, balance = 0, balanceSwitch = 92}
 
 -- steering page
 steeringPage = {
     pageName = language.steeringPage,
     page = {
-        {enable=1, name=language.assignChanel, type=CHANNEL, settingTable="steering", value="output"},
-        {enable=1, name=language.drOption, type=CHECKBOX, settingTable="steering", value="DR"},
-        {enable={"steering", "DR"}, name=language.drSwitch, type=TRIM, settingTable="steering", value="drSwitch"},
-        {enable=1, name=language.limitOption, type=CHECKBOX, settingTable="steering", value="limit"},
-        {enable={"steering", "limit"}, name=language.limitSwitch, type=TRIM, settingTable="steering", value="limitSwitch"}
+        {name=language.assignChanel, type=CHANNEL, setting={"steering","output"}},
+        {name=language.drOption, type=CHECKBOX, setting={"steering","DR"}},
+        {enable={"steering", "DR"}, name=language.drSwitch, type=TRIM, setting={"steering","drSwitch"}},
+        {name=language.limitOption, type=CHECKBOX, setting={"steering","limit"}},
+        {enable={"steering", "limit"}, name=language.limitSwitch, type=TRIM, setting={"steering","limitSwitch"}}
     }
+}
+
+escLimitMenu = {
+    {name=language.escLimit, type=CHECKBOX, setting={"esc","limit","enable"}, reload=1},
+    {name=language.escLimitMode, type=COMBO, setting={"esc","limit","mode"}, options={"Drive Mode", "Switch"}},
 }
 
 -- esc page
 escPage = {
     pageName = language.escPage,
     page = {
-        {enable=1, name=language.assignChanel, type=CHANNEL, settingTable="esc", value="output"},
-        {enable=1, name=language.armOption, type=CHECKBOX, settingTable="esc", value="arm"},
-        {enable={"esc", "arm"}, name=language.armSwitch, type=SWITCH, settingTable="esc", value="armSwitch"},
+        {name=language.assignChanel, type=CHANNEL, setting={"esc","output"}},
+        {disable={"esc", "limit", "enable"}, name=language.escLimit, type=CHECKBOX, setting={"esc","limit","enable"}},
+        {enable={"esc", "limit", "enable"}, name=language.escLimitSettings, type=SUBMENU, submenu=escLimitMenu},
+        {name=language.armOption, type=CHECKBOX, setting={"esc","arm"}},
+        {enable={"esc", "arm"}, name=language.armSwitch, type=SWITCH, setting={"esc","armSwitch"}},
     }
 }
 
@@ -34,7 +41,7 @@ escPage = {
 brakeServoPage = {
     pageName = language.brakePage,
     page = {
-        {enable=1, name=language.limitOption, type=CHECKBOX, settingTable="brake", value="limit"},
-        {enable={"brake", "limit"}, name=language.limitSwitch, type=TRIM, settingTable="brake", value="limitSwitch"}
+        {name=language.limitOption, type=CHECKBOX, setting={"brake","limit"}},
+        {enable={"brake", "limit"}, name=language.limitSwitch, type=TRIM, setting={"brake","limitSwitch"}}
     }
 }
