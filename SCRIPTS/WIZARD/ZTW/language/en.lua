@@ -47,7 +47,7 @@ language = {
     crabSteer = "crab steer switch",
     ztsPages = "manage zts pages",
     ztsSteering = "Steering",
-    ztsDrive = "throttle / brake",
+    ztsDrive = "TH / BRK",
     ztmPage = "ZTM Settings",
     sensor = "Sensor"
 }
