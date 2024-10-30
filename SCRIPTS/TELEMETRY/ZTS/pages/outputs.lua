@@ -46,7 +46,7 @@ local function drawBrake()
 
     if settingEnabled(settings.brake, "limit") then brakeLimit = model.getGlobalVariable(2, driveMode) end
 
-    lcd.drawText(2, yPos, "ESC", SMLSIZE)
+    lcd.drawText(2, yPos, "Brake", SMLSIZE)
 
     if settingEnabled(settings.brake, "balance") then
         brakeBalance = model.getGlobalVariable(3, driveMode)
@@ -94,25 +94,28 @@ function shared.init()
 end
 
 local function showTrim(event)
-    if settingEnabled(settings.brake, "servo") then height = 45
+    if settingEnabled(settings.brake, "servo") then height = 50
     else height = 30 end
 
-    lcd.drawFilledRectangle(9, 15, 110, height, ERASE + CENTER)
-    lcd.drawRectangle(9, 15, 110, height, CENTER)
+    lcd.drawFilledRectangle(9, 9, 110, height, ERASE + CENTER)
+    lcd.drawRectangle(9, 9, 110, height, CENTER)
 
     -- steering center
-    lcd.drawText(64, 18, "Steering Center", CENTER + BOLD)
+    lcd.drawText(64, 12, "Steering Center", CENTER + BOLD)
     steeringOutputTable = model.getOutput(settings.steering.output)
-    lcd.drawNumber(55, 28, 1500 + steeringOutputTable.ppmCenter, getFieldFlags(0))
+    if steeringOutputTable.revert == 0 then steeringCenter = steeringOutputTable.ppmCenter
+    else steeringCenter = steeringOutputTable.ppmCenter * -1 end
+    drawCenterGauge(25, 22, 80, 5, 100, steeringCenter)
+    lcd.drawNumber(55, 30, 1500 + steeringOutputTable.ppmCenter, getFieldFlags(0))
 
     if field==0 then
-        steeringOutputTable.ppmCenter = valueIncDec(event, steeringOutputTable.ppmCenter, -500, 500)
+        steeringOutputTable.ppmCenter = valueIncDec(event, steeringOutputTable.ppmCenter, -100, 100)
         model.setOutput(settings.steering.output, steeringOutputTable)
     end
 
     if settingEnabled(settings.brake, "servo") then
         -- brake servo center
-        lcd.drawText(64, 38, "Brake Servo Center", CENTER + BOLD)
+        lcd.drawText(64, 39, "Brake Servo Center", CENTER + BOLD)
         brakeOutputTable = model.getOutput(settings.brake.servoOutput)
         lcd.drawNumber(55, 48, 1500 + brakeOutputTable.ppmCenter, getFieldFlags(1))
 
@@ -136,24 +139,28 @@ function shared.run(event)
     lcd.drawLine(0, yPos, 128, yPos, SOLID, FORCE)
     drawBrake()
 
-    -- servo trim
-    if showTrimFlag == true then
-        showTrim(event)
-    end
+    if not alarmActiv then
+        -- servo trim
+        if showTrimFlag == true then
+            showTrim(event)
+        end
 
 
-    if event == 100 then
-        shared.changeScreen(1)
-    elseif event == 101 then
-        shared.changeScreen(-1)
-    end
+        if event == 100 then
+            shared.changeScreen(1)
+        elseif event == 101 then
+            shared.changeScreen(-1)
+        end
 
-    if not showTrimFlag and event == EVT_VIRTUAL_ENTER then
-        showTrimFlag = true
-        edit = false
-    elseif showTrimFlag and event == EVT_VIRTUAL_EXIT then
+        if not showTrimFlag and event == EVT_VIRTUAL_ENTER then
+            showTrimFlag = true
+            edit = false
+        elseif showTrimFlag and event == EVT_VIRTUAL_EXIT then
+            showTrimFlag = false
+        elseif showTrimFlag then
+            navigate(event, fieldMax, 0, 0)
+        end
+    else
         showTrimFlag = false
-    elseif showTrimFlag then
-        navigate(event, fieldMax, 0, 0)
     end
 end

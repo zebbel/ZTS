@@ -84,16 +84,20 @@ function drawTitle(name, armLS)
     drawTransmitterVoltage(2, 2, LCD_W / 10)
 end
 
-function drawCenterGauge(x, y, w, h, max, val)
+function drawCenterGauge(x, y, w, h, range, val)
     lcd.drawRectangle(x, y, w, h)
     lcd.drawLine((w/2)+x, y-2, (w/2)+x, y+h+1, SOLID, 0)
+
+    val = math.ceil(100 / range * val)
 
     local width = math.ceil((w/2) / 100 * val + 0.2)
 
     if val > 0 then
         lcd.drawFilledRectangle((w/2)+x, y+1, width, h-2)
+        lcd.drawText(x+w+1, y-1, ">")
     elseif val < 0 then
         lcd.drawFilledRectangle((w/2)+x+width, y+1, width * -1, h-2)
+        lcd.drawText(x-5, y-1, "<")
     end
 end
 
@@ -120,29 +124,6 @@ function drawLimitOffsetGauge(x, y, w, h, min, max, limit, offset, val)
     lcd.drawFilledRectangle(xStart, y + 1, width, h - 2)
 end
 
-function drawLimitOffsetGaugeSplit(x, y, w, h, limitLeft, limitRight, offsetLeft, offsetRight, val, side)
-    lcd.drawRectangle(x, y, w, h)
-
-    local barVal = math.ceil((w/2) / 100 * val)
-    if barVal > 1 or barVal < -1 then
-        lcd.drawLine((w/2)+x, y-2, (w/2)+x, y+h+1, SOLID, 0)
-        if barVal > 0 then
-            barVal = barVal -1
-        end
-    end
-    lcd.drawLine((w/2)+x+barVal, y-2, (w/2)+x+barVal, y+h+1, SOLID, 0)
-    lcd.drawLine(x-1, y-2, x-1, y+h+1, SOLID, 0)
-    lcd.drawLine(x+w, y-2, x+w, y+h+1, SOLID, 0)
-
-    local width = ((w/2) / 100) * (((limitLeft / 100) * ((100-offsetLeft) / 100)) * 100)
-    local xStart = x + ((w / 2) - width) + 1
-    lcd.drawFilledRectangle(xStart, y + 1, width, h-2)
-
-    local width = ((w/2) / 100) * (((limitRight / 100) * ((100-offsetRight) / 100)) * 100)
-    local xStart = x + (w / 2)
-    lcd.drawFilledRectangle(xStart, y + 1, width-1, h-2)
-end
-
 function drawRelationNumber(x, y, min, max, relation)
     if min < 0 then
         max = max + math.abs(min)
@@ -152,9 +133,9 @@ function drawRelationNumber(x, y, min, max, relation)
     local frontRatio = (100 / max) * relation
     local backRatio = 100 - frontRatio
 
-    lcd.drawNumber(x+10, y, backRatio, RIGHT)
-    lcd.drawText(x+12, y, "/")
-    lcd.drawNumber(x+19, y, frontRatio)
+    lcd.drawNumber(x+10, y, backRatio, SMLSIZE + RIGHT)
+    lcd.drawText(x+12, y, "/", SMLSIZE)
+    lcd.drawNumber(x+19, y, frontRatio, SMLSIZE)
 end
 
 function drawDriveMode(x, y)
@@ -221,8 +202,8 @@ function drawLink(x, y)
     lcd.drawText(x + 24, y + 2, rssi, SMLSIZE + ((rssi == 0 or rssi < alarm_low) and BLINK or 0))
 end
 
-function drawVoltageImage(x, y, w)
-    local voltage = getValue('RxBt')
+function drawVoltageImage(x, y, w, sensor)
+    local voltage = getValue(sensor)
     local batt, cell = 0, 0
     
     -- Try to calculate cells count from batt voltage or skip if using Cels telemetry
@@ -272,4 +253,13 @@ function drawVoltageImage(x, y, w)
             lcd.drawLine(x + 1, y + 49 - offset, x + w - 1, y + 49 - offset, SOLID, 0)
         end
     end
+end
+
+function drawWarnPopup(x, y, message)
+    lcd.drawFilledRectangle(x, y, 110, 50, ERASE + CENTER)
+    lcd.drawRectangle(x, y, 110, 50 , CENTER)
+
+    lcd.drawText(LCD_W/2, y+2, "Warning", CENTER + BOLD + MIDSIZE)
+
+    lcd.drawText(LCD_W/2, y+25, message, CENTER + BLINK)
 end

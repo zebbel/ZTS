@@ -1,4 +1,4 @@
-version = "V0.1.0"
+version = "V0.0.2"
 -- ZTS settings
 ztsSettings = {}
 -- init ztsSettings with base model settings
@@ -23,6 +23,8 @@ local function init()
     if fileExists(settingFilePath) then
         ztsSettings = getSettings(ztsSettings, settingFilePath, true)
     end
+
+    --printSettings(ztsSettings, 0)
 
     -- init the ui
     initUI(startPage)

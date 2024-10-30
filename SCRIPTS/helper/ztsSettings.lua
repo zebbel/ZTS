@@ -46,6 +46,7 @@ function settingEnabled(settingTable, setting)
 end
 
 local function copyTable(k, v, settingTable, sourceTable)
+    --print(type(v), k, sourceTable)
     if type(v) == "table" then
         local subTable = v
         local subSourceTable = sourceTable[k]
@@ -53,7 +54,9 @@ local function copyTable(k, v, settingTable, sourceTable)
             copyTable(x, y, settingTable[k], sourceTable[k])
         end
     else
-        settingTable[k] = sourceTable[k]
+        if sourceTable ~= nil then
+            settingTable[k] = sourceTable[k]
+        end
     end
 end
 

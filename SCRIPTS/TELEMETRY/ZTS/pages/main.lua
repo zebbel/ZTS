@@ -1,4 +1,4 @@
-local shared = ...
+shared = ...
 
 local showMenuFlag = false
 edit = false
@@ -27,33 +27,38 @@ local function showMenu(event)
 
     lcd.drawFilledRectangle(9, 15, 110, height, ERASE + CENTER)
     lcd.drawRectangle(9, 15, 110, height, CENTER)
-end
 
-function shared.init()
-    if settingEnabled(settings.ztm, {"sensorReplace", "enable"}) then
-        if settingEnabled(settings.ztm, {"sensorReplace", "sensors", "temp", "enable"})then
-            sensorName = model.getSensor(settings.ztm.sensorReplace.sensors.temp.allocation).name
-            settings.ztm.sensorReplace.sensors.temp.id = getFieldInfo(sensorName).id
+    lcd.drawText(64, 20, "Reset Timer", getFieldFlags(0) + CENTER)
+
+    if field == 0 then
+        edit = false
+        if event == EVT_VIRTUAL_ENTER then
+            model.resetTimer(0)
+            showMenuFlag = false
         end
     end
 end
 
+function shared.init()
+    
+end
+
 function shared.background()
-    if getRSSI() ~= 0 then
-        if settingEnabled(settings.zts, {"batIndicator", "alarm"}) then
-            cell = math.ceil((getValue('RxBt') / 4.37) - 0.4)
-            cell = cell == (5 or 7) and cell + 1 or cell
+    
+end
 
-            if getValue('RxBt') / cell <= settings.zts.batIndicator.minCell then
-                playHaptic(10, 500)
-            end
-        end
-
-        if settingEnabled(settings.ztm, {"sensorReplace", "sensors", "temp",     "alarm"}) then
-            if getValue(settings.ztm.sensorReplace.sensors.temp.id) > settings.ztm.sensorReplace.sensors.temp.maxTemp then
-                playHaptic(10, 500)
-            end
-        end
+function secondsToClock(seconds)
+    local seconds = tonumber(seconds)
+  
+    if seconds <= 0 then
+        return "00:00"
+        --return "00:00:00"
+    else
+        hours = string.format("%02.f", math.floor(seconds/3600));
+        mins = string.format("%02.f", math.floor(seconds/60 - (hours*60)))
+        secs = string.format("%02.f", math.floor(seconds - hours*3600 - mins *60))
+        return mins..":"..secs
+        --return hours..":"..mins..":"..secs
     end
 end
 
@@ -61,31 +66,41 @@ function shared.run(event)
     drawLink(2, 12)
     drawDriveMode(47, 12, CENTER + BOLD)
 
-    if settingEnabled(settings.zts, {"batIndicator", "enable"}) then drawVoltageImage(110, 11, 10) end
+    if settingEnabled(settings.zts, {"batIndicator", "enable"}) then drawVoltageImage(110, 11, 10, 'RxBt') end
     if settingEnabled(settings.steering, "fourWS") then fourWheelSteering() end
 
+    if settingEnabled(settings.zts, {"timer", "enable"}) then
+        lcd.drawText(50, 42, secondsToClock(model.getTimer(0).value), DBLSIZE)
+        lcd.drawText(68, 55, "m", SMALL)
+        lcd.drawText(90, 55, "s", SMALL)
+    end
+
     if settingEnabled(settings.ztm, {"sensorReplace", "enable"}) then
-        lcd.drawNumber(35, 42, getValue(settings.ztm.sensorReplace.sensors.temp.id) * 10, DBLSIZE + RIGHT + PREC1)
-        lcd.drawText(35, 42, "°C", LEFT)
+        lcd.drawNumber(32, 42, getValue(settings.ztm.sensorReplace.sensors.temp.id) * 10, DBLSIZE + RIGHT + PREC1)
+        lcd.drawText(32, 42, "°C", LEFT)
     end
 
-    -- Menu
-    if showMenuFlag == true then
-        showMenu(event)
-    end
-  
-    if event == 100 then
-        shared.changeScreen(1)
-    elseif event == 101 then
-        shared.changeScreen(-1)
-    end
+    if not alarmActiv then
+        -- Menu
+        if showMenuFlag == true then
+            showMenu(event)
+        end
+    
+        if event == 100 then
+            shared.changeScreen(1)
+        elseif event == 101 then
+            shared.changeScreen(-1)
+        end
 
-    if not showMenuFlag and event == EVT_VIRTUAL_ENTER then
-        showMenuFlag = true
-        edit = false
-    elseif showMenuFlag and event == EVT_VIRTUAL_EXIT then
+        if not showMenuFlag and event == EVT_VIRTUAL_ENTER then
+            showMenuFlag = true
+            edit = false
+        elseif showMenuFlag and event == EVT_VIRTUAL_EXIT then
+            showMenuFlag = false
+        elseif showMenuFlag then
+            navigate(event, fieldMax, 0, 0)
+        end
+    else
         showMenuFlag = false
-    elseif showMenuFlag then
-        navigate(event, fieldMax, 0, 0)
     end
 end
