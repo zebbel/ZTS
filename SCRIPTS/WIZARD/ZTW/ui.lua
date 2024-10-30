@@ -46,8 +46,8 @@ local function setFieldValue(field, value)
     if type(field.setting) == "table" then
         local sub = field.setting
         local table = ztsSettings
-        for index=1, #sub, 1 do table = table[sub[index]] end
-        table[field.value] = value
+        for index=1, #sub-1, 1 do table = table[sub[index]] end
+        table[field.setting[#field.setting]] = value
     elseif field.setting ~= nil then
         ztsSettings[field.setting][field.value] = value
     end
