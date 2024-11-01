@@ -1,7 +1,7 @@
 local shared = ...
 
 local driveMode = 0
-local showTrimFlag = false
+local showMenuFlag = false
 edit = false
 field = 0
 fieldMax = 1
@@ -93,7 +93,11 @@ function shared.init()
     end
 end
 
+local subMenu = 0
+
 local function showTrim(event)
+    navigate(event, fieldMax, 0, 0)
+
     if settingEnabled(settings.brake, "servo") then height = 50
     else height = 30 end
 
@@ -114,6 +118,8 @@ local function showTrim(event)
     end
 
     if settingEnabled(settings.brake, "servo") then
+        fieldMax = 1
+
         -- brake servo center
         lcd.drawText(64, 39, "Brake Servo Center", CENTER + BOLD)
         brakeOutputTable = model.getOutput(settings.brake.servoOutput)
@@ -125,6 +131,76 @@ local function showTrim(event)
         end
     else
         fieldMax = 0
+    end
+
+    if event == EVT_VIRTUAL_EXIT then
+        subMenu = 0
+        field = 0
+    end
+end
+
+local function copyTrims(dm)
+    -- steering limit
+    if settingEnabled(settings.steering, "limit") then
+        gv = model.getGlobalVariable(0, driveMode)
+        model.setGlobalVariable(0, dm, gv)
+    end
+    -- steering d/r
+    if settingEnabled(settings.steering, "DR") then
+        gv = model.getGlobalVariable(1, driveMode)
+        model.setGlobalVariable(1, dm, gv)
+    end
+    -- brake limit
+    if settingEnabled(settings.brake, "limit") then
+        gv = model.getGlobalVariable(2, driveMode)
+        model.setGlobalVariable(2, dm, gv)
+    end
+    -- brake balance
+    if settingEnabled(settings.brake, "balance") then
+        gv = model.getGlobalVariable(3, driveMode)
+        model.setGlobalVariable(3, dm, gv)
+    end
+end
+
+local function showMenu(event)
+    if subMenu == 0 then
+        fieldMax = 2
+
+        lcd.drawFilledRectangle(6, 9, 116, 40, ERASE + CENTER)
+        lcd.drawRectangle(6, 9, 116, 40, CENTER)
+
+        lcd.drawText(64, 12, "Trims", getFieldFlags(0) + CENTER)
+
+        if driveMode == 0 then
+            lcd.drawText(64, 22, "copy Settings to DM1", getFieldFlags(1) + CENTER)
+            lcd.drawText(64, 32, "copy Settings to DM2", getFieldFlags(2) + CENTER)
+        elseif driveMode == 1 then
+            lcd.drawText(64, 22, "copy Settings to DM0", getFieldFlags(1) + CENTER)
+            lcd.drawText(64, 32, "copy Settings to DM2", getFieldFlags(2) + CENTER)
+        elseif driveMode == 2 then
+            lcd.drawText(64, 22, "copy Settings to DM0", getFieldFlags(1) + CENTER)
+            lcd.drawText(64, 32, "copy Settings to DM1", getFieldFlags(2) + CENTER)
+        end
+
+        if event == EVT_VIRTUAL_ENTER then
+            if field == 0 then subMenu = 1
+            elseif field == 1 then
+                if driveMode == 0 then copyTrims(1)
+                elseif driveMode == 1 then copyTrims(0)
+                elseif driveMode == 2 then copyTrims(0) end
+            elseif field == 2 then
+                if driveMode == 0 then copyTrims(2)
+                elseif driveMode == 1 then copyTrims(2)
+                elseif driveMode == 2 then copyTrims(1) end
+            end
+        else
+            navigate(event, fieldMax, 0, 0)
+        end
+        if event == EVT_VIRTUAL_EXIT then 
+            showMenuFlag = false
+        end
+    elseif subMenu == 1 then
+        showTrim(event)
     end
 end
 
@@ -141,8 +217,8 @@ function shared.run(event)
 
     if not alarmActiv then
         -- servo trim
-        if showTrimFlag == true then
-            showTrim(event)
+        if showMenuFlag == true then
+            showMenu(event)
         end
 
 
@@ -152,15 +228,15 @@ function shared.run(event)
             shared.changeScreen(-1)
         end
 
-        if not showTrimFlag and event == EVT_VIRTUAL_ENTER then
-            showTrimFlag = true
+        if not showMenuFlag and event == EVT_VIRTUAL_ENTER then
+            showMenuFlag = true
             edit = false
-        elseif showTrimFlag and event == EVT_VIRTUAL_EXIT then
-            showTrimFlag = false
-        elseif showTrimFlag then
-            navigate(event, fieldMax, 0, 0)
+        --elseif showMenuFlag and event == EVT_VIRTUAL_EXIT then
+        --    showMenuFlag = false
+        --elseif showMenuFlag then
+        --    navigate(event, fieldMax, 0, 0)
         end
     else
-        showTrimFlag = false
+        showMenuFlag = false
     end
 end
