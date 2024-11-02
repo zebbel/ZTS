@@ -31,7 +31,6 @@ language = {
     confirm2 = "is overwritten!",
     confirm = "[Enter Long] to confirm",
     ztsOptions = "ZTS options",
-    batIndicator = "batt indicator?",
     minCell = "min cell V",
     sensorReplace = "sensor replace?",
     ztmTempSensor = "temp Sensor",
@@ -47,5 +46,10 @@ language = {
     sensor = "Sensor",
 
     ztmTimer = "Timer?",
-    ztsStartSwitch = "start Switch"
+    ztsStartSwitch = "start Switch",
+
+    batIndicator = "batt indicator?",
+    batIndicatorMode = "mode",
+    batIndicatorType = "lipo type",
+    batIndicatorCells = "number of cells"
 }

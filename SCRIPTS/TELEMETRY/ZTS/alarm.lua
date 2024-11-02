@@ -61,7 +61,7 @@ function alarmRun(event)
             end
         end
 
-        if settingEnabled(settings.ztm, {"sensorReplace", "sensors", "temp", "alarm"}) then
+        if settingEnabled(settings.ztm, {"sensorReplace", "enable"}) then
             if getValue(settings.ztm.sensorReplace.sensors.temp.id) > settings.ztm.sensorReplace.sensors.temp.maxTemp then
                 if tempAlarmArmed == true then
                     alarmActiv = true

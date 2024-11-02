@@ -24,7 +24,7 @@ local function init()
         ztsSettings = getSettings(ztsSettings, settingFilePath, true)
     end
 
-    --printSettings(ztsSettings, 0)
+    printSettings(ztsSettings, 0)
 
     -- init the ui
     initUI(startPage)
