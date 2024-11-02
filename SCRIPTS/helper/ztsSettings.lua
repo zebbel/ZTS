@@ -54,7 +54,7 @@ local function copyTable(k, v, settingTable, sourceTable)
             copyTable(x, y, settingTable[k], sourceTable[k])
         end
     else
-        if sourceTable ~= nil then
+        if sourceTable[k] ~= nil then
             settingTable[k] = sourceTable[k]
         end
     end
@@ -68,7 +68,7 @@ function getSettings(settingsTable, filePath, toNumber)
         copyTable(k, v, settingsTable, zstFile)
     end
 
-    return settingsTable
+    --return settingsTable
 end
 
 local function ymlToList(settingsTable, yml, toNumber)
