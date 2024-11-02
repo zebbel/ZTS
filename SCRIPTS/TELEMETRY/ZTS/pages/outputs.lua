@@ -99,7 +99,7 @@ local function showTrim(event)
     navigate(event, fieldMax, 0, 0)
 
     if settingEnabled(settings.brake, "servo") then height = 50
-    else height = 30 end
+    else height = 35 end
 
     lcd.drawFilledRectangle(9, 9, 110, height, ERASE + CENTER)
     lcd.drawRectangle(9, 9, 110, height, CENTER)
@@ -216,7 +216,6 @@ function shared.run(event)
     drawBrake()
 
     if not alarmActiv then
-        -- servo trim
         if showMenuFlag == true then
             showMenu(event)
         end
@@ -231,10 +230,6 @@ function shared.run(event)
         if not showMenuFlag and event == EVT_VIRTUAL_ENTER then
             showMenuFlag = true
             edit = false
-        --elseif showMenuFlag and event == EVT_VIRTUAL_EXIT then
-        --    showMenuFlag = false
-        --elseif showMenuFlag then
-        --    navigate(event, fieldMax, 0, 0)
         end
     else
         showMenuFlag = false
