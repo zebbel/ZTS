@@ -6,8 +6,9 @@ tempAlarmArmed = true
 function alarmInit()
     -- get cell count
     if settingEnabled(settings.zts, {"batIndicator", "alarm"}) then
-        cell = math.ceil((getValue('RxBt') / 4.37) - 0.4)
-        cell = cell == (5 or 7) and cell + 1 or cell
+        if settings.zts.batIndicator.mode == 0 then
+            settings.zts.batIndicator.cells = math.ceil((getValue('RxBt') / 4.37) - 0.4)
+        end
     end
 
     if settingEnabled(settings.ztm, {"sensorReplace", "enable"}) then
@@ -23,12 +24,12 @@ local batFilterPos = 1
 local batFilterLastTime = 0
 local function getBatValue()
     if #batValues < 10 then
-        batValues[batFilterPos] = getValue('RxBt') / cell
+        batValues[batFilterPos] = getValue('RxBt') / settings.zts.batIndicator.cells
         batFilterPos = batFilterPos + 1
         batFilterLastTime = getTime()
     elseif getTime() > batFilterLastTime + 10 then
         batFilterLastTime = getTime()
-        batValues[batFilterPos] = getValue('RxBt') / cell
+        batValues[batFilterPos] = getValue('RxBt') / settings.zts.batIndicator.cells
         batFilterPos = batFilterPos + 1
         if batFilterPos > #batValues then
             batFilterPos = 1

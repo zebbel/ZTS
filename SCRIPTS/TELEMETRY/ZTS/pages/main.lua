@@ -40,7 +40,16 @@ local function showMenu(event)
 end
 
 function shared.init()
-    
+    if settings.zts.batIndicator.mode == 0 then
+        settings.zts.batIndicator.cells = math.ceil((getValue('RxBt') / 4.37) - 0.4)
+        if getValue('RxBt') / settings.zts.batIndicator.cells < 4.3 then settings.zts.batIndicator.type = 0
+        else settings.zts.batIndicator.type = 1 end
+    end
+
+    settings.zts.batIndicator.minVoltage = settings.zts.batIndicator.minCell * settings.zts.batIndicator.cells
+
+    if settings.zts.batIndicator.type == 0 then settings.zts.batIndicator.maxVoltage = 4.2 * settings.zts.batIndicator.cells
+    else settings.zts.batIndicator.maxVoltage = 4.35 * settings.zts.batIndicator.cells end
 end
 
 function shared.background()
@@ -66,7 +75,7 @@ function shared.run(event)
     drawLink(2, 12)
     drawDriveMode(47, 12, CENTER + BOLD)
 
-    if settingEnabled(settings.zts, {"batIndicator", "enable"}) then drawVoltageImage(110, 11, 10, 'RxBt') end
+    if settingEnabled(settings.zts, {"batIndicator", "enable"}) then drawVoltageImage(110, 11, 10, getValue('RxBt'), settings.zts.batIndicator.minVoltage, settings.zts.batIndicator.maxVoltage) end
     if settingEnabled(settings.steering, "fourWS") then fourWheelSteering() end
 
     if settingEnabled(settings.zts, {"timer", "enable"}) then

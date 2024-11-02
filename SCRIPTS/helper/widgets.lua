@@ -202,30 +202,7 @@ function drawLink(x, y)
     lcd.drawText(x + 24, y + 2, rssi, SMLSIZE + ((rssi == 0 or rssi < alarm_low) and BLINK or 0))
 end
 
-function drawVoltageImage(x, y, w, sensor)
-    local voltage = getValue(sensor)
-    local batt, cell = 0, 0
-    
-    -- Try to calculate cells count from batt voltage or skip if using Cels telemetry
-    -- Don't support 5s and 7s: it's dangerous to detect - empty 8s look like an 7s!
-    if (type(voltage) == 'table') then
-        for i, v in ipairs(voltage) do
-            batt = batt + v
-            cell = cell + 1
-        end
-
-        voltage = batt
-    else
-        cell = math.ceil((voltage / 4.37) - 0.4)
-        cell = cell == (5 or 7) and cell + 1 or cell
-
-        batt = voltage
-    end
-
-    -- Set mix-max battery cell value, also detect HV type
-    local voltageHigh = batt > 4.22 * cell and 4.35 or 4.2
-    local voltageLow = 3.3
-
+function drawVoltageImage(x, y, w, voltage, voltageLow, voltageHigh)
     -- Draw battery outline
     lcd.drawLine(x + 2, y + 1, x + w - 2, y + 1, SOLID, 0)
     lcd.drawLine(x, y + 2, x + w - 1, y + 2, SOLID, 0)
@@ -249,7 +226,7 @@ function drawVoltageImage(x, y, w, sensor)
 
     -- Fill the battery
     for offset = 0, 46, 1 do
-        if ((offset * (voltageHigh - voltageLow) / 47) + voltageLow) < tonumber(batt / cell) then
+        if ((offset * (voltageHigh - voltageLow) / 47) + voltageLow) < tonumber(voltage) then
             lcd.drawLine(x + 1, y + 49 - offset, x + w - 1, y + 49 - offset, SOLID, 0)
         end
     end
