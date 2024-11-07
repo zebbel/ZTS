@@ -55,9 +55,9 @@ function alarmRun(event)
                         batAlarmArmed = false
                         alarmActiv = false
                     end
+                    return
                 end
-            elseif not alarmActiv then
-                alarmActiv = false
+            else
                 batAlarmArmed = true
             end
         end
@@ -72,11 +72,13 @@ function alarmRun(event)
                         tempAlarmArmed = false
                         alarmActiv = false
                     end
+                    return
                 end
-            elseif not alarmActiv then
-                alarmActiv = false
+            else
                 tempAlarmArmed = true
             end
         end
     end
+
+    alarmActiv = false
 end
