@@ -161,6 +161,7 @@ local function setTimer()
     if settingEnabled(ztsSettings.zts.timer, "enable") then
         timerTable.mode = 1
         timerTable.switch = 124
+        timerTable.persistent = 2
         model.setTimer(0, timerTable)
     end
 end

@@ -44,7 +44,8 @@ language = {
     ztmPage = "ZTM Settings",
     sensor = "Sensor",
 
-    ztmTimer = "Timer?",
+    ztmTimer = "Timer",
+    ztmTimerAutoReste = "auto reset",
     ztsStartSwitch = "start Switch",
 
     batIndicator = "batt indicator?",

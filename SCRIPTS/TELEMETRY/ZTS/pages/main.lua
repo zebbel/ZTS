@@ -50,6 +50,14 @@ function shared.init()
 
     if settings.zts.batIndicator.type == 0 then settings.zts.batIndicator.maxVoltage = 4.2 * settings.zts.batIndicator.cells
     else settings.zts.batIndicator.maxVoltage = 4.35 * settings.zts.batIndicator.cells end
+
+    if settingEnabled({"zts","timer","enable"}) then
+        if settings.zts.timer.reset == 1 then
+            model.resetTimer(0)
+        elseif settings.zts.timer.reset == 2 then
+            if getValue('RxBt') / settings.zts.batIndicator.maxVoltage * 100 > 98 then model.resetTimer(0) end
+        end
+    end
 end
 
 function shared.background()

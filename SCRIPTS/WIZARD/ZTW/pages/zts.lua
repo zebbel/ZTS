@@ -10,7 +10,8 @@ ztsSettings["zts"] = {
         alarmSound = 0
     },
     timer = {
-        enable = 0
+        enable = 0,
+        reset = 0
     },
     pages = {
         output = 0
@@ -29,7 +30,8 @@ batIndicatorMenu = {
 }
 
 timerMenu = {
-    {enable=1, name=language.ztmTimer, type=CHECKBOX, setting={"zts","timer","enable"}},
+    {enable=1, name=language.enable, type=CHECKBOX, setting={"zts","timer","enable"}},
+    {enable={"zts","timer","enable"}, name=language.ztmTimerAutoReste, type=COMBO, setting={"zts","timer","reset"}, options={"never", "boot", "bat > 98%"}}
     --{enable={"zts","timer","enable"}, name=language.ztsStartSwitch, type=TEST, setting={"zts","timer","start"}}
 }
 
