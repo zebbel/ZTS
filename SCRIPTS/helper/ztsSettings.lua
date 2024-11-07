@@ -30,19 +30,14 @@ function fileExists(path)
     end
 end
 
-function settingEnabled(settingTable, setting)
-    --if settingTable ~= nil and settingTable[setting] == 1 then return true end
-    if settingTable ~= nil then
-        if type(setting) == "string" then
-            if settingTable[setting] == 1 then return true end
-        elseif type(setting) == "table" then
-            for k,v in pairs(setting) do
-                settingTable = settingTable[v]
-            end
-            if settingTable == 1 then return true end
-        end
+function settingEnabled(setting)
+    value = settings
+    for index=1, #setting, 1 do value = value[setting[index]] end
+    if value == 1 then 
+        return true
+    else
+        return false
     end
-    return false
 end
 
 local function copyTable(k, v, settingTable, sourceTable)

@@ -75,16 +75,16 @@ function shared.run(event)
     drawLink(2, 12)
     drawDriveMode(47, 12, CENTER + BOLD)
 
-    if settingEnabled(settings.zts, {"batIndicator", "enable"}) then drawVoltageImage(110, 11, 10, getValue('RxBt'), settings.zts.batIndicator.minVoltage, settings.zts.batIndicator.maxVoltage) end
-    if settingEnabled(settings.steering, "fourWS") then fourWheelSteering() end
+    if settingEnabled({"zts", "batIndicator", "enable"}) then drawVoltageImage(110, 11, 10, getValue('RxBt'), settings.zts.batIndicator.minVoltage, settings.zts.batIndicator.maxVoltage) end
+    if settingEnabled({"steering", "fourWS"}) then fourWheelSteering() end
 
-    if settingEnabled(settings.zts, {"timer", "enable"}) then
+    if settingEnabled({"zts", "timer", "enable"}) then
         lcd.drawText(50, 42, secondsToClock(model.getTimer(0).value), DBLSIZE)
         lcd.drawText(68, 55, "m", SMALL)
         lcd.drawText(90, 55, "s", SMALL)
     end
 
-    if settingEnabled(settings.ztm, {"sensorReplace", "enable"}) then
+    if settingEnabled({"ztm", "sensorReplace", "enable"}) then
         lcd.drawNumber(32, 42, getValue(settings.ztm.sensorReplace.sensors.temp.id) * 10, DBLSIZE + RIGHT + PREC1)
         lcd.drawText(32, 42, "°C", LEFT)
     end

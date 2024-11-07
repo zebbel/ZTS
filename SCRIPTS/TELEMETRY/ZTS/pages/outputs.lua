@@ -13,12 +13,12 @@ local function drawSteering()
     local yPos = 12
     local stearLimit
 
-    if settingEnabled(settings.steering, "limit") then stearLimit = model.getGlobalVariable(0, driveMode)
+    if settingEnabled({"steering", "limit"}) then stearLimit = model.getGlobalVariable(0, driveMode)
     else stearLimit = 100 end
 
     lcd.drawText(2, yPos, "Steering", SMLSIZE)
 
-    if settingEnabled(settings.steering, "DR") then
+    if settingEnabled({"steering", "DR"}) then
         lcd.drawNumber(70, yPos, model.getGlobalVariable(1, driveMode), SMLSIZE + RIGHT)
         lcd.drawText(70, yPos, "%", SMLSIZE)
         lcd.drawText(78, yPos, "DR", SMLSIZE)
@@ -32,7 +32,7 @@ local function drawSteering()
     lcd.drawNumber(18, yPos+17, getOutputValue(0) / 10.24, SMLSIZE + RIGHT)
     lcd.drawText(19, yPos+17, "%", SMLSIZE)
 
-    if settingEnabled(settings.steering, "limit") then
+    if settingEnabled({"steering", "limit"}) then
         lcd.drawNumber(70, yPos+17, stearLimit, SMLSIZE + RIGHT)
         lcd.drawText(70, yPos+17, "%", SMLSIZE)
         lcd.drawText(78, yPos+17, "limit", SMLSIZE)
@@ -44,24 +44,24 @@ local function drawBrake()
     local brakeLimit = 100
     local brakeBalance = 0
 
-    if settingEnabled(settings.brake, "limit") then brakeLimit = model.getGlobalVariable(2, driveMode) end
+    if settingEnabled({"brake", "limit"}) then brakeLimit = model.getGlobalVariable(2, driveMode) end
 
     lcd.drawText(2, yPos, "Brake", SMLSIZE)
 
-    if settingEnabled(settings.brake, "balance") then
+    if settingEnabled({"brake", "balance"}) then
         brakeBalance = model.getGlobalVariable(3, driveMode)
         drawRelationNumber(50, yPos, -100, 100, brakeBalance)
         lcd.drawText(82, yPos, "balance", SMLSIZE)
     end
 
-    if settingEnabled(settings.brake, "servo") then
+    if settingEnabled({"brake", "servo"}) then
         lcd.drawText(2, yPos+8, "R", BOLD)
         lcd.drawText(120, yPos+8, "F", BOLD)
     end
 
     drawLimitOffsetGauge(12, yPos+8, 104, 7, -100, 100, brakeLimit, brakeBalance, 0)
 
-    if settingEnabled(settings.brake, "limit") then
+    if settingEnabled({"brake", "limit"}) then
         lcd.drawNumber(70, yPos+17, brakeLimit, SMLSIZE + RIGHT)
         lcd.drawText(70, yPos+17, "%", SMLSIZE)
         lcd.drawText(78, yPos+17, "limit", SMLSIZE)
@@ -71,9 +71,9 @@ local function drawBrake()
     lcd.drawNumber(18, yPos+17, rearBrakeOutput, SMLSIZE + RIGHT)
     lcd.drawText(19, yPos+17, "%", SMLSIZE)
 
-    if settingEnabled(settings.brake, "servo") then
+    if settingEnabled({"brake", "servo"}) then
         local brakeValue
-        if settingEnabled(settings.brake, "invert") then
+        if settingEnabled({"brake", "invert"}) then
             brakeValue = (getOutputValue(2) / 10.24) * settings.brake.invert
         else
             brakeValue = (getOutputValue(2) / 10.24)
@@ -87,7 +87,7 @@ function shared.init()
     if model.getOutput(settings.steering.output).revert == 0 then settings["steering"]["invert"] = 1
     else settings["steering"]["invert"] = -1 end
 
-    if settingEnabled(settings.brake, "servoOutput") then
+    if settingEnabled({"brake", "servoOutput"}) then
         if model.getOutput(settings.brake.servoOutput).revert == 0 then settings["brake"]["invert"] = 1
         else settings["brake"]["invert"] = -1 end
     end
@@ -98,7 +98,7 @@ local subMenu = 0
 local function showTrim(event)
     navigate(event, fieldMax, 0, 0)
 
-    if settingEnabled(settings.brake, "servo") then height = 50
+    if settingEnabled({"brake", "servo"}) then height = 50
     else height = 35 end
 
     lcd.drawFilledRectangle(9, 9, 110, height, ERASE + CENTER)
@@ -117,7 +117,7 @@ local function showTrim(event)
         model.setOutput(settings.steering.output, steeringOutputTable)
     end
 
-    if settingEnabled(settings.brake, "servo") then
+    if settingEnabled({"brake", "servo"}) then
         fieldMax = 1
 
         -- brake servo center
@@ -141,22 +141,22 @@ end
 
 local function copyTrims(dm)
     -- steering limit
-    if settingEnabled(settings.steering, "limit") then
+    if settingEnabled({"steering", "limit"}) then
         gv = model.getGlobalVariable(0, driveMode)
         model.setGlobalVariable(0, dm, gv)
     end
     -- steering d/r
-    if settingEnabled(settings.steering, "DR") then
+    if settingEnabled({"steering", "DR"}) then
         gv = model.getGlobalVariable(1, driveMode)
         model.setGlobalVariable(1, dm, gv)
     end
     -- brake limit
-    if settingEnabled(settings.brake, "limit") then
+    if settingEnabled({"steering", "limit"}) then
         gv = model.getGlobalVariable(2, driveMode)
         model.setGlobalVariable(2, dm, gv)
     end
     -- brake balance
-    if settingEnabled(settings.brake, "balance") then
+    if settingEnabled({"steering", "balance"}) then
         gv = model.getGlobalVariable(3, driveMode)
         model.setGlobalVariable(3, dm, gv)
     end

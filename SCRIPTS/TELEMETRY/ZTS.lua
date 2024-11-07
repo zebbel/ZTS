@@ -33,7 +33,7 @@ local function init()
         settingFileError = true
     end
 
-    if settingEnabled(settings.zts, {"pages", "output"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/outputs.lua" end
+    if settingEnabled({"zts", "pages", "output"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/outputs.lua" end
     shared.current = 1
     shared.changeScreen(0)
 
