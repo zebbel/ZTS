@@ -41,6 +41,10 @@ function shared.init()
             if getValue('RxBt') / settings.zts.batIndicator.maxVoltage * 100 > 98 then model.resetTimer(0) end
         end
     end
+
+    if settingEnabled({"ztm", "sensorReplace", "sensors", "temp", "enable"}) then
+        settings.ztm.sensorReplace.sensors.temp.id = getSensorID(settings.ztm.sensorReplace.sensors.temp.allocation)
+    end
 end
 
 function shared.background()

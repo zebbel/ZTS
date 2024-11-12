@@ -7,7 +7,8 @@ ztsSettings["ztm"] = {
                 enable = 0, 
                 allocation = 0,
                 alarm = 0,
-                maxTemp = 60
+                maxTemp = 60,
+                alarmSound = 0
             }
         }
     }
