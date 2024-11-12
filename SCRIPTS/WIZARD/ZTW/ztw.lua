@@ -1,4 +1,4 @@
-version = "V0.1.0"
+version = "V0.0.2"
 -- ZTS settings
 ztsSettings = {}
 -- init ztsSettings with base model settings
@@ -18,11 +18,14 @@ local function init()
 
     -- load pages.lua (inits pages to be shown based on ztsSetting)
     loadScript("/SCRIPTS/WIZARD/ZTW/pages.lua", 'tc')()
+    --printSettings(ztsSettings, 0)
 
     -- reload ztsSettings to overwrite base settings with real settings
     if fileExists(settingFilePath) then
-        ztsSettings = getSettings(ztsSettings, settingFilePath, true)
+        getSettings(ztsSettings, settingFilePath, true)
     end
+
+    --printSettings(ztsSettings, 0)
 
     -- init the ui
     initUI(startPage)

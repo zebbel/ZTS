@@ -4,8 +4,9 @@ settings = {}
 
 loadScript("/SCRIPTS/helper/widgets.lua")()
 loadScript("/SCRIPTS/helper/ztsSettings.lua")()
+loadScript("/SCRIPTS/TELEMETRY/ZTS/alarm.lua")()
 
-local shared = {}
+shared = {}
 shared.screens = {
     "/SCRIPTS/TELEMETRY/ZTS/pages/main.lua"
 }
@@ -28,21 +29,22 @@ local function init()
     local settingFilePath = "/MODELS/ZTS/" .. string.gsub(model.getInfo().filename, ".yml", "") .. ".txt"
     if fileExists(settingFilePath) then
         settings = readSettingsFile(settings, settingFilePath, true)
+
+        if settingEnabled({"zts", "pages", "output"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/outputs.lua" end
+        shared.current = 1
+        shared.changeScreen(0)
+
+        alarmInit()
     else
         settingFileError = true
     end
-
-    if settingEnabled(settings.zts, {"pages", "esc"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/esc.lua" end
-    if settingEnabled(settings.zts, {"pages", "steering"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/steering.lua" end
-
-    shared.current = 1
-    shared.changeScreen(0)
-
-    print(model.getFlightMode(1).switch)
 end
 
 local function background()
-    shared.background()
+    if not settingFileError then
+        shared.background()
+        alarmRun()
+    end
 end
 
 local function run(event)
@@ -55,6 +57,8 @@ local function run(event)
         drawTitle(modelName, settings.esc.armSwitch)
 
         shared.run(event)
+
+        alarmRun(event)
     end
 end
 

@@ -30,22 +30,18 @@ function fileExists(path)
     end
 end
 
-function settingEnabled(settingTable, setting)
-    --if settingTable ~= nil and settingTable[setting] == 1 then return true end
-    if settingTable ~= nil then
-        if type(setting) == "string" then
-            if settingTable[setting] == 1 then return true end
-        elseif type(setting) == "table" then
-            for k,v in pairs(setting) do
-                settingTable = settingTable[v]
-            end
-            if settingTable == 1 then return true end
-        end
+function settingEnabled(setting)
+    value = settings
+    for index=1, #setting, 1 do value = value[setting[index]] end
+    if value == 1 then 
+        return true
+    else
+        return false
     end
-    return false
 end
 
 local function copyTable(k, v, settingTable, sourceTable)
+    --print(type(v), k, sourceTable)
     if type(v) == "table" then
         local subTable = v
         local subSourceTable = sourceTable[k]
@@ -53,7 +49,9 @@ local function copyTable(k, v, settingTable, sourceTable)
             copyTable(x, y, settingTable[k], sourceTable[k])
         end
     else
-        settingTable[k] = sourceTable[k]
+        if sourceTable[k] ~= nil then
+            settingTable[k] = sourceTable[k]
+        end
     end
 end
 
@@ -65,7 +63,7 @@ function getSettings(settingsTable, filePath, toNumber)
         copyTable(k, v, settingsTable, zstFile)
     end
 
-    return settingsTable
+    --return settingsTable
 end
 
 local function ymlToList(settingsTable, yml, toNumber)

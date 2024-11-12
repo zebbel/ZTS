@@ -1,7 +1,7 @@
 local shared = ...
 
 local driveMode = 0
-local showTrimFlag = false
+local showMenuFlag = false
 edit = false
 field = 0
 fieldMax = 1
@@ -13,12 +13,12 @@ local function drawSteering()
     local yPos = 12
     local stearLimit
 
-    if settingEnabled(settings.steering, "limit") then stearLimit = model.getGlobalVariable(0, driveMode)
+    if settingEnabled({"steering", "limit"}) then stearLimit = model.getGlobalVariable(0, driveMode)
     else stearLimit = 100 end
 
     lcd.drawText(2, yPos, "Steering", SMLSIZE)
 
-    if settingEnabled(settings.steering, "DR") then
+    if settingEnabled({"steering", "DR"}) then
         lcd.drawNumber(70, yPos, model.getGlobalVariable(1, driveMode), SMLSIZE + RIGHT)
         lcd.drawText(70, yPos, "%", SMLSIZE)
         lcd.drawText(78, yPos, "DR", SMLSIZE)
@@ -32,7 +32,7 @@ local function drawSteering()
     lcd.drawNumber(18, yPos+17, getOutputValue(0) / 10.24, SMLSIZE + RIGHT)
     lcd.drawText(19, yPos+17, "%", SMLSIZE)
 
-    if settingEnabled(settings.steering, "limit") then
+    if settingEnabled({"steering", "limit"}) then
         lcd.drawNumber(70, yPos+17, stearLimit, SMLSIZE + RIGHT)
         lcd.drawText(70, yPos+17, "%", SMLSIZE)
         lcd.drawText(78, yPos+17, "limit", SMLSIZE)
@@ -44,24 +44,24 @@ local function drawBrake()
     local brakeLimit = 100
     local brakeBalance = 0
 
-    if settingEnabled(settings.brake, "limit") then brakeLimit = model.getGlobalVariable(2, driveMode) end
+    if settingEnabled({"brake", "limit"}) then brakeLimit = model.getGlobalVariable(2, driveMode) end
 
-    lcd.drawText(2, yPos, "ESC", SMLSIZE)
+    lcd.drawText(2, yPos, "Brake", SMLSIZE)
 
-    if settingEnabled(settings.brake, "balance") then
+    if settingEnabled({"brake", "balance"}) then
         brakeBalance = model.getGlobalVariable(3, driveMode)
         drawRelationNumber(50, yPos, -100, 100, brakeBalance)
         lcd.drawText(82, yPos, "balance", SMLSIZE)
     end
 
-    if settingEnabled(settings.brake, "servo") then
+    if settingEnabled({"brake", "servo"}) then
         lcd.drawText(2, yPos+8, "R", BOLD)
         lcd.drawText(120, yPos+8, "F", BOLD)
     end
 
     drawLimitOffsetGauge(12, yPos+8, 104, 7, -100, 100, brakeLimit, brakeBalance, 0)
 
-    if settingEnabled(settings.brake, "limit") then
+    if settingEnabled({"brake", "limit"}) then
         lcd.drawNumber(70, yPos+17, brakeLimit, SMLSIZE + RIGHT)
         lcd.drawText(70, yPos+17, "%", SMLSIZE)
         lcd.drawText(78, yPos+17, "limit", SMLSIZE)
@@ -71,9 +71,9 @@ local function drawBrake()
     lcd.drawNumber(18, yPos+17, rearBrakeOutput, SMLSIZE + RIGHT)
     lcd.drawText(19, yPos+17, "%", SMLSIZE)
 
-    if settingEnabled(settings.brake, "servo") then
+    if settingEnabled({"brake", "servo"}) then
         local brakeValue
-        if settingEnabled(settings.brake, "invert") then
+        if settingEnabled({"brake", "invert"}) then
             brakeValue = (getOutputValue(2) / 10.24) * settings.brake.invert
         else
             brakeValue = (getOutputValue(2) / 10.24)
@@ -87,32 +87,41 @@ function shared.init()
     if model.getOutput(settings.steering.output).revert == 0 then settings["steering"]["invert"] = 1
     else settings["steering"]["invert"] = -1 end
 
-    if settingEnabled(settings.brake, "servoOutput") then
+    if settingEnabled({"brake", "servoOutput"}) then
         if model.getOutput(settings.brake.servoOutput).revert == 0 then settings["brake"]["invert"] = 1
         else settings["brake"]["invert"] = -1 end
     end
 end
 
-local function showTrim(event)
-    if settingEnabled(settings.brake, "servo") then height = 45
-    else height = 30 end
+local subMenu = 0
 
-    lcd.drawFilledRectangle(9, 15, 110, height, ERASE + CENTER)
-    lcd.drawRectangle(9, 15, 110, height, CENTER)
+local function showTrim(event)
+    navigate(event, fieldMax, 0, 0)
+
+    if settingEnabled({"brake", "servo"}) then height = 50
+    else height = 35 end
+
+    lcd.drawFilledRectangle(9, 9, 110, height, ERASE + CENTER)
+    lcd.drawRectangle(9, 9, 110, height, CENTER)
 
     -- steering center
-    lcd.drawText(64, 18, "Steering Center", CENTER + BOLD)
+    lcd.drawText(64, 12, "Steering Center", CENTER + BOLD)
     steeringOutputTable = model.getOutput(settings.steering.output)
-    lcd.drawNumber(55, 28, 1500 + steeringOutputTable.ppmCenter, getFieldFlags(0))
+    if steeringOutputTable.revert == 0 then steeringCenter = steeringOutputTable.ppmCenter
+    else steeringCenter = steeringOutputTable.ppmCenter * -1 end
+    drawCenterGauge(25, 22, 80, 5, 100, steeringCenter)
+    lcd.drawNumber(55, 30, 1500 + steeringOutputTable.ppmCenter, getFieldFlags(0))
 
     if field==0 then
-        steeringOutputTable.ppmCenter = valueIncDec(event, steeringOutputTable.ppmCenter, -500, 500)
+        steeringOutputTable.ppmCenter = valueIncDec(event, steeringOutputTable.ppmCenter, -100, 100)
         model.setOutput(settings.steering.output, steeringOutputTable)
     end
 
-    if settingEnabled(settings.brake, "servo") then
+    if settingEnabled({"brake", "servo"}) then
+        fieldMax = 1
+
         -- brake servo center
-        lcd.drawText(64, 38, "Brake Servo Center", CENTER + BOLD)
+        lcd.drawText(64, 39, "Brake Servo Center", CENTER + BOLD)
         brakeOutputTable = model.getOutput(settings.brake.servoOutput)
         lcd.drawNumber(55, 48, 1500 + brakeOutputTable.ppmCenter, getFieldFlags(1))
 
@@ -122,6 +131,76 @@ local function showTrim(event)
         end
     else
         fieldMax = 0
+    end
+
+    if event == EVT_VIRTUAL_EXIT then
+        subMenu = 0
+        field = 0
+    end
+end
+
+local function copyTrims(dm)
+    -- steering limit
+    if settingEnabled({"steering", "limit"}) then
+        gv = model.getGlobalVariable(0, driveMode)
+        model.setGlobalVariable(0, dm, gv)
+    end
+    -- steering d/r
+    if settingEnabled({"steering", "DR"}) then
+        gv = model.getGlobalVariable(1, driveMode)
+        model.setGlobalVariable(1, dm, gv)
+    end
+    -- brake limit
+    if settingEnabled({"steering", "limit"}) then
+        gv = model.getGlobalVariable(2, driveMode)
+        model.setGlobalVariable(2, dm, gv)
+    end
+    -- brake balance
+    if settingEnabled({"steering", "balance"}) then
+        gv = model.getGlobalVariable(3, driveMode)
+        model.setGlobalVariable(3, dm, gv)
+    end
+end
+
+local function showMenu(event)
+    if subMenu == 0 then
+        fieldMax = 2
+
+        lcd.drawFilledRectangle(6, 9, 116, 40, ERASE + CENTER)
+        lcd.drawRectangle(6, 9, 116, 40, CENTER)
+
+        lcd.drawText(64, 12, "Trims", getFieldFlags(0) + CENTER)
+
+        if driveMode == 0 then
+            lcd.drawText(64, 22, "copy Settings to DM1", getFieldFlags(1) + CENTER)
+            lcd.drawText(64, 32, "copy Settings to DM2", getFieldFlags(2) + CENTER)
+        elseif driveMode == 1 then
+            lcd.drawText(64, 22, "copy Settings to DM0", getFieldFlags(1) + CENTER)
+            lcd.drawText(64, 32, "copy Settings to DM2", getFieldFlags(2) + CENTER)
+        elseif driveMode == 2 then
+            lcd.drawText(64, 22, "copy Settings to DM0", getFieldFlags(1) + CENTER)
+            lcd.drawText(64, 32, "copy Settings to DM1", getFieldFlags(2) + CENTER)
+        end
+
+        if event == EVT_VIRTUAL_ENTER then
+            if field == 0 then subMenu = 1
+            elseif field == 1 then
+                if driveMode == 0 then copyTrims(1)
+                elseif driveMode == 1 then copyTrims(0)
+                elseif driveMode == 2 then copyTrims(0) end
+            elseif field == 2 then
+                if driveMode == 0 then copyTrims(2)
+                elseif driveMode == 1 then copyTrims(2)
+                elseif driveMode == 2 then copyTrims(1) end
+            end
+        else
+            navigate(event, fieldMax, 0, 0)
+        end
+        if event == EVT_VIRTUAL_EXIT then 
+            showMenuFlag = false
+        end
+    elseif subMenu == 1 then
+        showTrim(event)
     end
 end
 
@@ -136,24 +215,23 @@ function shared.run(event)
     lcd.drawLine(0, yPos, 128, yPos, SOLID, FORCE)
     drawBrake()
 
-    -- servo trim
-    if showTrimFlag == true then
-        showTrim(event)
-    end
+    if not alarmActiv then
+        if showMenuFlag == true then
+            showMenu(event)
+        end
 
 
-    if event == 100 then
-        shared.changeScreen(1)
-    elseif event == 101 then
-        shared.changeScreen(-1)
-    end
+        if event == 100 then
+            shared.changeScreen(1)
+        elseif event == 101 then
+            shared.changeScreen(-1)
+        end
 
-    if not showTrimFlag and event == EVT_VIRTUAL_ENTER then
-        showTrimFlag = true
-        edit = false
-    elseif showTrimFlag and event == EVT_VIRTUAL_EXIT then
-        showTrimFlag = false
-    elseif showTrimFlag then
-        navigate(event, fieldMax, 0, 0)
+        if not showMenuFlag and event == EVT_VIRTUAL_ENTER then
+            showMenuFlag = true
+            edit = false
+        end
+    else
+        showMenuFlag = false
     end
 end
