@@ -211,8 +211,7 @@ end
 function shared.run(event)
     drawSteering()
     -- seperator
-    local yPos = 38
-    lcd.drawLine(0, yPos, 128, yPos, SOLID, FORCE)
+    lcd.drawLine(0, 38, 128, 38, SOLID, FORCE)
     drawBrake()
 
     if not alarmActiv then

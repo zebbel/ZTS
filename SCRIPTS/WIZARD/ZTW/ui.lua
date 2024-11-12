@@ -26,6 +26,7 @@ local numberPerPage = 4
 local baseAttr = 0
 local spacing = 10
 local charWidth = 6
+local xPos = 1
 
 -- get value of given field
 local function getFieldValue(field)
@@ -43,14 +44,10 @@ end
 
 -- set value of given field
 local function setFieldValue(field, value)
-    if type(field.setting) == "table" then
-        local sub = field.setting
-        local table = ztsSettings
-        for index=1, #sub-1, 1 do table = table[sub[index]] end
-        table[field.setting[#field.setting]] = value
-    elseif field.setting ~= nil then
-        ztsSettings[field.setting][field.value] = value
-    end
+    local sub = field.setting
+    local table = ztsSettings
+    for index=1, #sub-1, 1 do table = table[sub[index]] end
+    table[field.setting[#field.setting]] = value
 end
 
 -- check if field is visible
@@ -67,7 +64,14 @@ local function loadSubmenu(pagesContent, submenuTable)
     for index=1, #submenuTable, 1 do
         local entry = submenuTable[index]
         if (type(entry.enable) == "number" and entry.enable == 1) or (type(entry.enable) == "table" and fieldEnabled(entry)) then
+            entry.xPos = xPos
             pagesContent[#pagesContent + 1] = entry
+
+            if entry.type == SUBMENU and entry.value == 1 then
+                xPos = xPos + 2
+                loadSubmenu(pagesContent, entry.submenu)
+                xPos = xPos - 2
+            end
         end
     end
 end
@@ -82,10 +86,13 @@ local function loadPages(pagesTabel)
             for contentIndex=1, #pagesTabel[index][loadPage], 1 do
                 local entry = pagesTabel[index][loadPage][contentIndex]
                 if (type(entry.enable) == "number" and entry.enable == 1) or (type(entry.enable) == "table" and fieldEnabled(entry)) then
+                    entry.xPos = xPos
                     pagesContent[#pagesContent + 1] = entry
 
                     if entry.type == SUBMENU and entry.value == 1 then
+                        xPos = xPos + 2
                         loadSubmenu(pagesContent, entry.submenu)
+                        xPos = 1
                     end
                 end
             end
@@ -198,34 +205,34 @@ local function redrawFieldPage()
         local yOffset = 7
 
         if field.type == CHANNEL then
-            lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
+            lcd.drawText(field.xPos, (spacing * index) + yOffset, field.name, LEFT + attr)
             lcd.drawSource(LCD_W - 29, (spacing * index) + yOffset, MIXSRC_CH1+value, attr)
         elseif field.type == TRIM then
-            lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
+            lcd.drawText(field.xPos, (spacing * index) + yOffset, field.name, LEFT + attr)
             lcd.drawSource(LCD_W - 29, (spacing * index) + yOffset, value, attr)
         elseif field.type == SWITCH then
-            lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
+            lcd.drawText(field.xPos, (spacing * index) + yOffset, field.name, LEFT + attr)
             lcd.drawSwitch(LCD_W - 29, (spacing * index) + yOffset, value, attr)
         elseif field.type == COMBO then
             if value > #field.options then value = 0 end
-            lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
+            lcd.drawText(field.xPos, (spacing * index) + yOffset, field.name, LEFT + attr)
             width = (#field.options[value + 1] + 1) * charWidth
             lcd.drawText(LCD_W - width, (spacing * index) + yOffset, field.options[value + 1], LEFT + attr)
         elseif field.type == COMBOBOX then
-            lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
+            lcd.drawText(field.xPos, (spacing * index) + yOffset, field.name, LEFT + attr)
             lcd.drawCombobox(LCD_W - 30, (spacing * index) + yOffset-2, 30, field.options, value, attr)
         elseif field.type == TEXT then
             lcd.drawText(64, (spacing * index) + yOffset, field.name, CENTER + attr)
         elseif field.type == VALUE then
-            lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
+            lcd.drawText(field.xPos, (spacing * index) + yOffset, field.name, LEFT + attr)
             lcd.drawText(LCD_W - 29, (spacing * index) + yOffset, value, LEFT + attr)
         elseif field.type == CHECKBOX then
-            lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + attr)
+            lcd.drawText(field.xPos, (spacing * index) + yOffset, field.name, LEFT + attr)
             drawCheckbox(LCD_W - 30, ((spacing * index) + yOffset)-1, value, attr)
         elseif field.type == FUNCTION then
             lcd.drawText(64, (spacing * index) + yOffset, field.name, CENTER + attr)
         elseif field.type == SUBMENU then
-            lcd.drawText(1, (spacing * index) + yOffset, field.name, LEFT + BOLD + attr)
+            lcd.drawText(field.xPos, (spacing * index) + yOffset, field.name, LEFT + BOLD + attr)
             if field.value == 1 then lcd.drawText(LCD_W - 10, (spacing * index) + yOffset, CHAR_DOWN, LEFT + attr)
             else lcd.drawText(LCD_W - 10, (spacing * index) + yOffset, CHAR_UP, LEFT + attr) end
         elseif field.type == TEST then
