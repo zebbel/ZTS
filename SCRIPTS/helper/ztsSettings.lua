@@ -32,6 +32,7 @@ end
 
 function settingEnabled(setting)
     value = settings
+    if setting == nil or value[setting[1]] == nil then return false end
     for index=1, #setting, 1 do value = value[setting[index]] end
     if value == 1 then 
         return true
