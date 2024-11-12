@@ -29,20 +29,22 @@ local function init()
     local settingFilePath = "/MODELS/ZTS/" .. string.gsub(model.getInfo().filename, ".yml", "") .. ".txt"
     if fileExists(settingFilePath) then
         settings = readSettingsFile(settings, settingFilePath, true)
+
+        if settingEnabled({"zts", "pages", "output"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/outputs.lua" end
+        shared.current = 1
+        shared.changeScreen(0)
+
+        alarmInit()
     else
         settingFileError = true
     end
-
-    if settingEnabled({"zts", "pages", "output"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/outputs.lua" end
-    shared.current = 1
-    shared.changeScreen(0)
-
-    alarmInit()
 end
 
 local function background()
-    shared.background()
-    alarmRun()
+    if not settingFileError then
+        shared.background()
+        alarmRun()
+    end
 end
 
 local function run(event)
