@@ -22,23 +22,6 @@ local function fourWheelSteering()
     end
 end
 
-local function showMenu(event)
-    local height = 30
-
-    lcd.drawFilledRectangle(9, 15, 110, height, ERASE + CENTER)
-    lcd.drawRectangle(9, 15, 110, height, CENTER)
-
-    lcd.drawText(64, 20, "Reset Timer", getFieldFlags(0) + CENTER)
-
-    if field == 0 then
-        edit = false
-        if event == EVT_VIRTUAL_ENTER then
-            model.resetTimer(0)
-            showMenuFlag = false
-        end
-    end
-end
-
 function shared.init()
     if settings.zts.batIndicator.mode == 0 then
         settings.zts.batIndicator.cells = math.ceil((getValue('RxBt') / 4.37) - 0.4)
@@ -62,6 +45,23 @@ end
 
 function shared.background()
     
+end
+
+local function showMenu(event)
+    local height = 30
+
+    lcd.drawFilledRectangle(9, 15, 110, height, ERASE + CENTER)
+    lcd.drawRectangle(9, 15, 110, height, CENTER)
+
+    lcd.drawText(64, 20, "Reset Timer", getFieldFlags(0) + CENTER)
+
+    if field == 0 then
+        edit = false
+        if event == EVT_VIRTUAL_ENTER then
+            model.resetTimer(0)
+            showMenuFlag = false
+        end
+    end
 end
 
 function secondsToClock(seconds)
