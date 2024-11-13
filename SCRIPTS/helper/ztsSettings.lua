@@ -41,6 +41,22 @@ function settingEnabled(setting)
     end
 end
 
+-- get table of availabe sensors
+function getSensorTable()
+    local sensors = {}
+    local x = 0
+    while 1 do
+        sensorName = model.getSensor(x).name
+        if sensorName == nil or sensorName == "" then break end
+        sensors[#sensors+1] = sensorName
+        x = x + 1
+    end
+
+    -- if no sensors are discoverd we need at least one entry
+    if sensors[1] == nil then sensors = {"None"} end
+    return sensors
+end
+
 function getSensorID(setting)
     local sensors = {}
     local x = 0

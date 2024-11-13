@@ -2,6 +2,7 @@
 ztsSettings["zts"] = {
     batIndicator = {
         enable = 0,
+        sensor = "RxBt",
         mode = 0,
         type = 0,
         cells = 1,
@@ -35,6 +36,7 @@ batAlarmMenu = {
 -- batIndicator submenu
 batIndicatorMenu = {
     {enable=1, name=language.batIndicator, type=CHECKBOX, setting={"zts","batIndicator","enable"}},
+    {enable={"zts","batIndicator","enable"}, name=language.sensor, type=COMBOTEXT, setting={"zts","batIndicator","sensor"}, options=getSensorTable()},
     {enable={"zts","batIndicator","enable"}, name="lipo type", type=SUBMENU, submenu=lipoTypeMenu},
     {enable={"zts","batIndicator","enable"}, name="lipo alarm", type=SUBMENU, submenu=batAlarmMenu},
 }

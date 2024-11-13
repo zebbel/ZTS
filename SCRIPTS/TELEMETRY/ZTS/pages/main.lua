@@ -24,8 +24,8 @@ end
 
 function shared.init()
     if settings.zts.batIndicator.mode == 0 then
-        settings.zts.batIndicator.cells = math.ceil((getValue('RxBt') / 4.37) - 0.4)
-        if getValue('RxBt') / settings.zts.batIndicator.cells < 4.3 then settings.zts.batIndicator.type = 0
+        settings.zts.batIndicator.cells = math.ceil((getValue(settings.zts.batIndicator.sensor) / 4.37) - 0.4)
+        if getValue(settings.zts.batIndicator.sensor) / settings.zts.batIndicator.cells < 4.3 then settings.zts.batIndicator.type = 0
         else settings.zts.batIndicator.type = 1 end
     end
 
@@ -38,7 +38,7 @@ function shared.init()
         if settings.zts.timer.reset == 1 then
             model.resetTimer(0)
         elseif settings.zts.timer.reset == 2 then
-            if getValue('RxBt') / settings.zts.batIndicator.maxVoltage * 100 > 98 then model.resetTimer(0) end
+            if getValue(settings.zts.batIndicator.sensor) / settings.zts.batIndicator.maxVoltage * 100 > 98 then model.resetTimer(0) end
         end
     end
 end
@@ -83,7 +83,7 @@ function shared.run(event)
     drawLink(2, 12)
     drawDriveMode(47, 12, CENTER + BOLD)
 
-    if settingEnabled({"zts", "batIndicator", "enable"}) then drawVoltageImage(110, 11, 10, getValue('RxBt'), settings.zts.batIndicator.minVoltage, settings.zts.batIndicator.maxVoltage) end
+    if settingEnabled({"zts", "batIndicator", "enable"}) then drawVoltageImage(110, 11, 10, getValue(settings.zts.batIndicator.sensor), settings.zts.batIndicator.minVoltage, settings.zts.batIndicator.maxVoltage) end
     if settingEnabled({"steering", "fourWS"}) then fourWheelSteering() end
 
     if settingEnabled({"zts", "timer", "enable"}) then

@@ -7,7 +7,7 @@ function alarmInit()
     -- get cell count
     if settingEnabled(settings.zts, {"batIndicator", "alarm"}) then
         if settings.zts.batIndicator.mode == 0 then
-            settings.zts.batIndicator.cells = math.ceil((getValue('RxBt') / 4.37) - 0.4)
+            settings.zts.batIndicator.cells = math.ceil((getValue(settings.zts.batIndicator.sensor) / 4.37) - 0.4)
         end
     end
 
@@ -24,12 +24,12 @@ local batFilterPos = 1
 local batFilterLastTime = 0
 local function getBatValue()
     if #batValues < 10 then
-        batValues[batFilterPos] = getValue('RxBt') / settings.zts.batIndicator.cells
+        batValues[batFilterPos] = getValue(settings.zts.batIndicator.sensor) / settings.zts.batIndicator.cells
         batFilterPos = batFilterPos + 1
         batFilterLastTime = getTime()
     elseif getTime() > batFilterLastTime + 10 then
         batFilterLastTime = getTime()
-        batValues[batFilterPos] = getValue('RxBt') / settings.zts.batIndicator.cells
+        batValues[batFilterPos] = getValue(settings.zts.batIndicator.sensor) / settings.zts.batIndicator.cells
         batFilterPos = batFilterPos + 1
         if batFilterPos > #batValues then
             batFilterPos = 1
