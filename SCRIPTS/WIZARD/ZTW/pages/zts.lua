@@ -3,6 +3,8 @@ ztsSettings["zts"] = {
     batIndicator = {
         enable = 0,
         sensor = "RxBt",
+        filterEnable = 1,
+        lpfBeta = 0.5,
         mode = 0,
         type = 0,
         cells = 1,
@@ -17,6 +19,12 @@ ztsSettings["zts"] = {
     pages = {
         output = 0
     }
+}
+
+-- lipo filter submenu
+lipoFilterMenu = {
+    {enable=1, name="enable filter", type=CHECKBOX, setting={"zts","batIndicator","filterEnable"}},
+    {enable={"zts","batIndicator","filterEnable"}, name="lpfBeta", type=VALUE, min=0.01, max=1, step=0.01, setting={"zts","batIndicator","lpfBeta"}}
 }
 
 -- lipo type submenu
@@ -37,6 +45,7 @@ batAlarmMenu = {
 batIndicatorMenu = {
     {enable=1, name=language.batIndicator, type=CHECKBOX, setting={"zts","batIndicator","enable"}},
     {enable={"zts","batIndicator","enable"}, name=language.sensor, type=COMBOTEXT, setting={"zts","batIndicator","sensor"}, options=getSensorTable()},
+    {enable={"zts","batIndicator","enable"}, name="filter", type=SUBMENU, submenu=lipoFilterMenu},
     {enable={"zts","batIndicator","enable"}, name="lipo type", type=SUBMENU, submenu=lipoTypeMenu},
     {enable={"zts","batIndicator","enable"}, name="lipo alarm", type=SUBMENU, submenu=batAlarmMenu},
 }

@@ -1,6 +1,7 @@
 shared = ...
 
 local showMenuFlag = false
+local subMenu = 0
 edit = false
 field = 0
 fieldMax = 1
@@ -23,17 +24,6 @@ local function fourWheelSteering()
 end
 
 function shared.init()
-    if settings.zts.batIndicator.mode == 0 then
-        settings.zts.batIndicator.cells = math.ceil((getValue(settings.zts.batIndicator.sensor) / 4.37) - 0.4)
-        if getValue(settings.zts.batIndicator.sensor) / settings.zts.batIndicator.cells < 4.3 then settings.zts.batIndicator.type = 0
-        else settings.zts.batIndicator.type = 1 end
-    end
-
-    settings.zts.batIndicator.minVoltage = settings.zts.batIndicator.minCell * settings.zts.batIndicator.cells
-
-    if settings.zts.batIndicator.type == 0 then settings.zts.batIndicator.maxVoltage = 4.2 * settings.zts.batIndicator.cells
-    else settings.zts.batIndicator.maxVoltage = 4.35 * settings.zts.batIndicator.cells end
-
     if settingEnabled({"zts","timer","enable"}) then
         if settings.zts.timer.reset == 1 then
             model.resetTimer(0)
@@ -48,18 +38,27 @@ function shared.background()
 end
 
 local function showMenu(event)
-    local height = 30
+    if subMenu == 0 then
+        fieldMax = 1
 
-    lcd.drawFilledRectangle(9, 15, 110, height, ERASE + CENTER)
-    lcd.drawRectangle(9, 15, 110, height, CENTER)
+        lcd.drawFilledRectangle(6, 18, 116, 20, ERASE + CENTER)
+        lcd.drawRectangle(6, 18, 116, 20, CENTER)
 
-    lcd.drawText(64, 20, "Reset Timer", getFieldFlags(0) + CENTER)
+        lcd.drawText(64, 25, "Reset Timer", getFieldFlags(0) + CENTER)
 
-    if field == 0 then
-        edit = false
         if event == EVT_VIRTUAL_ENTER then
-            model.resetTimer(0)
+            if field == 0 then
+                edit = false
+                if event == EVT_VIRTUAL_ENTER then
+                    model.resetTimer(0)
+                    showMenuFlag = false
+                end
+            elseif field == 1 then subMenu = 1
+            end
+        elseif event == EVT_VIRTUAL_EXIT then 
             showMenuFlag = false
+        else
+            navigate(event, fieldMax, 0, 0)
         end
     end
 end
@@ -83,7 +82,7 @@ function shared.run(event)
     drawLink(2, 12)
     drawDriveMode(47, 12, CENTER + BOLD)
 
-    if settingEnabled({"zts", "batIndicator", "enable"}) then drawVoltageImage(110, 11, 10, getValue(settings.zts.batIndicator.sensor), settings.zts.batIndicator.minVoltage, settings.zts.batIndicator.maxVoltage) end
+    if settingEnabled({"zts", "batIndicator", "enable"}) then drawVoltageImage(110, 11, 10, sensor.batValue, settings.zts.batIndicator.minVoltage, settings.zts.batIndicator.maxVoltage) end
     if settingEnabled({"steering", "fourWS"}) then fourWheelSteering() end
 
     if settingEnabled({"zts", "timer", "enable"}) then
@@ -93,16 +92,11 @@ function shared.run(event)
     end
 
     if settingEnabled({"ztm", "sensorReplace", "enable"}) then
-        lcd.drawNumber(32, 42, getValue(settings.ztm.sensorReplace.sensors.temp.sensor) * 10, DBLSIZE + RIGHT + PREC1)
+        lcd.drawNumber(32, 42, sensor.temp * 10, DBLSIZE + RIGHT + PREC1)
         lcd.drawText(32, 42, "°C", LEFT)
     end
 
     if not alarmActiv then
-        -- Menu
-        if showMenuFlag == true then
-            showMenu(event)
-        end
-    
         if event == 100 then
             shared.changeScreen(1)
         elseif event == 101 then
@@ -112,10 +106,8 @@ function shared.run(event)
         if not showMenuFlag and event == EVT_VIRTUAL_ENTER then
             showMenuFlag = true
             edit = false
-        elseif showMenuFlag and event == EVT_VIRTUAL_EXIT then
-            showMenuFlag = false
         elseif showMenuFlag then
-            navigate(event, fieldMax, 0, 0)
+            showMenu(event)
         end
     else
         showMenuFlag = false

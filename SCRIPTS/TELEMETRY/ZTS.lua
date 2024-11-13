@@ -4,6 +4,7 @@ settings = {}
 
 loadScript("/SCRIPTS/helper/widgets.lua")()
 loadScript("/SCRIPTS/helper/ztsSettings.lua")()
+loadScript("/SCRIPTS/TELEMETRY/ZTS/sensors.lua")()
 loadScript("/SCRIPTS/TELEMETRY/ZTS/alarm.lua")()
 
 shared = {}
@@ -30,11 +31,13 @@ local function init()
     if fileExists(settingFilePath) then
         settings = readSettingsFile(settings, settingFilePath, true)
 
+        sensorsInit()
+        alarmInit()
+
         if settingEnabled({"zts", "pages", "output"}) then shared.screens[#shared.screens+1] = "/SCRIPTS/TELEMETRY/ZTS/pages/outputs.lua" end
         shared.current = 1
         shared.changeScreen(0)
 
-        alarmInit()
     else
         settingFileError = true
     end
@@ -58,6 +61,7 @@ local function run(event)
 
         shared.run(event)
 
+        sensorsRun()
         alarmRun(event)
     end
 end
