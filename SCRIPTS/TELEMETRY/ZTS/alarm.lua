@@ -65,7 +65,7 @@ function alarmRun(event)
 
         if settingEnabled({"ztm", "sensorReplace", "enable"}) then
             if settingEnabled({"ztm", "sensorReplace", "sensors", "temp", "alarm"}) then
-                if getValue(settings.ztm.sensorReplace.sensors.temp.id) > settings.ztm.sensorReplace.sensors.temp.maxTemp then
+                if getValue(settings.ztm.sensorReplace.sensors.temp.sensor) > settings.ztm.sensorReplace.sensors.temp.maxTemp then
                     if tempAlarmArmed == true then
                         if not alarmActiv and settingEnabled({"ztm","sensorReplace","sensors","temp", "alarmSound"}) then playFile("tohigh.wav") end
                         playHaptic(10, 500)

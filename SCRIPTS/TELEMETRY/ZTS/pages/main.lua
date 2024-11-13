@@ -41,10 +41,6 @@ function shared.init()
             if getValue('RxBt') / settings.zts.batIndicator.maxVoltage * 100 > 98 then model.resetTimer(0) end
         end
     end
-
-    if settingEnabled({"ztm", "sensorReplace", "sensors", "temp", "enable"}) then
-        settings.ztm.sensorReplace.sensors.temp.id = getSensorID(settings.ztm.sensorReplace.sensors.temp.allocation)
-    end
 end
 
 function shared.background()
@@ -97,7 +93,7 @@ function shared.run(event)
     end
 
     if settingEnabled({"ztm", "sensorReplace", "enable"}) then
-        lcd.drawNumber(32, 42, getValue(settings.ztm.sensorReplace.sensors.temp.id) * 10, DBLSIZE + RIGHT + PREC1)
+        lcd.drawNumber(32, 42, getValue(settings.ztm.sensorReplace.sensors.temp.sensor) * 10, DBLSIZE + RIGHT + PREC1)
         lcd.drawText(32, 42, "°C", LEFT)
     end
 
