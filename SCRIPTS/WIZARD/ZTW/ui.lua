@@ -35,9 +35,6 @@ local function getFieldValue(field)
         local sub = field.setting
         value = ztsSettings
         for index=1, #sub, 1 do value = value[sub[index]] end
-        --value = value[field.value]
-    --elseif field.setting ~= nil then
-    --    value = ztsSettings[field.setting][field.value]
     end
 
     if field.type == COMBOTEXT then

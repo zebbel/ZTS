@@ -42,7 +42,6 @@ function sensorsRun()
             sensor.batValue = lowPassFilter(sensor.batValue, getValue(settings.zts.batIndicator.sensor), settings.zts.batIndicator.lpfBeta)
         end
     end
-    --print(sensor.batValue)
 
     if settingEnabled({"ztm", "sensorReplace", "enable"}) then
         sensor.temp = getValue(settings.ztm.sensorReplace.sensors.temp.sensor)

@@ -46,7 +46,6 @@ function getSensorTable()
     local sensors = {}
     local x = 0
     while 1 do
-        --print(model.getSensor(x).name, model.getSensor(x).unit)
         sensorName = model.getSensor(x).name
         if sensorName == nil or sensorName == "" then break end
         sensors[#sensors+1] = sensorName .. "_" .. units[model.getSensor(x).unit]
@@ -72,7 +71,6 @@ function getSensorID(setting)
 end
 
 local function copyTable(k, v, settingTable, sourceTable)
-    --print(type(v), k, sourceTable)
     if type(v) == "table" then
         local subTable = v
         local subSourceTable = sourceTable[k]
@@ -93,8 +91,6 @@ function getSettings(settingsTable, filePath, toNumber)
     for k,v in pairs(settingsTable) do
         copyTable(k, v, settingsTable, zstFile)
     end
-
-    --return settingsTable
 end
 
 local function ymlToList(settingsTable, yml, toNumber)
@@ -245,7 +241,6 @@ end
 
 function saveSettings(filePath, settingTable)
     local file = io.open(filePath, "w")
-    --printSettings(settingTable, 0)
     writeSettings(file, settingTable, 0)
     io.close(file)
 end
