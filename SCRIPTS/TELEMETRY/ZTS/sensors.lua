@@ -9,6 +9,8 @@ end
 
 function sensorsInit()
     if settingEnabled({"zts", "batIndicator", "enable"}) then
+        settings.zts.batIndicator.sensor = string.sub(settings.zts.batIndicator.sensor, 0, string.find(settings.zts.batIndicator.sensor, "_")-1)
+
         sensor.batValue = 0
         if not settingEnabled({"zts", "batIndicator", "filterEnable"}) then
             settings.zts.batIndicator.lpfBeta = 1
@@ -27,6 +29,7 @@ function sensorsInit()
     end
 
     if settingEnabled({"ztm", "sensorReplace", "enable"}) then
+        settings.ztm.sensorReplace.sensors.temp.sensor = string.sub(settings.ztm.sensorReplace.sensors.temp.sensor, 0, string.find(settings.ztm.sensorReplace.sensors.temp.sensor, "_")-1)
         sensor.temp = 0
     end
 end
