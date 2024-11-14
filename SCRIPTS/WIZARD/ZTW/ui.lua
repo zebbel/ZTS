@@ -41,11 +41,9 @@ local function getFieldValue(field)
     end
 
     if field.type == COMBOTEXT then
-        --print(value)
         for index=1, #field.options-1, 1 do
             if value == field.options[index] then return index-1 end
         end
-        --print("nope")
         return 0
     end
 
@@ -59,7 +57,6 @@ local function setFieldValue(field, value)
     for index=1, #sub-1, 1 do table = table[sub[index]] end
 
     if field.type == COMBOTEXT then
-        print(field.options[value+1])
         table[field.setting[#field.setting]] = field.options[value+1]
     else
         table[field.setting[#field.setting]] = value
