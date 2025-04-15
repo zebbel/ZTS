@@ -86,6 +86,7 @@ local function setSpecialFunctions()
     local specialFunctionNum = 0
     local customFunctionTable = {switch = 185, func = FUNC_ADJUST_GVAR, name = nil, value = 94, mode = 1, param = 0, active = 1}
 
+    -- steering
     if settingEnabled(ztsSettings.steering, "limit") then
         setSpecialFunction(185, ztsSettings.steering.limitSwitch, 0, specialFunctionNum)
         specialFunctionNum = specialFunctionNum + 1
@@ -100,6 +101,7 @@ local function setSpecialFunctions()
         deleteSpecialFunction(1)
     end
 
+    -- brake
     if settingEnabled(ztsSettings.brake, "limit") then
         setSpecialFunction(185, ztsSettings.brake.limitSwitch, 2, specialFunctionNum)
         specialFunctionNum = specialFunctionNum + 1
@@ -114,25 +116,41 @@ local function setSpecialFunctions()
         deleteSpecialFunction(3)
     end
 
+    --telemtry screen autostart
+    if settingEnabled(ztsSettings.zts.telemetryAuto, "enable") then
+        customFunctionTable["switch"] = 124
+        customFunctionTable["func"] = 22
+        customFunctionTable["value"] = 1
+        model.setCustomFunction(specialFunctionNum, customFunctionTable)
+        specialFunctionNum = specialFunctionNum + 1
+    end
+
+    --arm
     if settingEnabled(ztsSettings.esc, "arm") then
         customFunctionTable["switch"] = -196
-        customFunctionTable["func"] = 23
+        customFunctionTable["func"] = 24
         customFunctionTable["name"] = "red"
+        customFunctionTable["value"] = nil
+        customFunctionTable["mode"] = nil
+        customFunctionTable["param"] = nil
+        customFunctionTable["repetition"] = 1
         model.setCustomFunction(specialFunctionNum, customFunctionTable)
         specialFunctionNum = specialFunctionNum + 1
 
         customFunctionTable["switch"] = 121
-        customFunctionTable["func"] = 23
+        customFunctionTable["func"] = 24
         customFunctionTable["name"] = "orange"
         model.setCustomFunction(specialFunctionNum, customFunctionTable)
         specialFunctionNum = specialFunctionNum + 1
 
         customFunctionTable["switch"] = 124
-        customFunctionTable["func"] = 23
+        customFunctionTable["func"] = 24
         customFunctionTable["name"] = "green"
         model.setCustomFunction(specialFunctionNum, customFunctionTable)
         specialFunctionNum = specialFunctionNum + 1
     end
+
+    deleteSpecialFunction(specialFunctionNum)
 end
 
 local function setFlightModes()
@@ -194,8 +212,8 @@ end
 local function setInputs()
     local inputTable = {name="", inputName="", source=75, weight=100, offset=0, switch=0, curveType=1, curveValue=0, carryTrim=0, flightModes=0}
 
-    -- G1 = -128, G2 = -127, G3 = -126, G4 = -125
-    -- -G1 = 127, -G2 = 126, -G3 = 125, -G4 = 124
+    -- G1 = 1254, G2 = 1255, G3 = 1256, G4 = 1257
+    -- -G1 = -1254, -G2 = -1255, -G3 = -1256, -G4 = -1257
     -- curveType: 0 = DIFF, 1 = EXPO
 
     model.deleteInputs()
@@ -203,13 +221,13 @@ local function setInputs()
     inputTable.inputName = "St"
     inputTable.source = 75
     if settingEnabled(ztsSettings.steering, "limit") then
-        inputTable.weight = -128
+        inputTable.weight = 1254
     else
         inputTable.weight = 100
     end
     if settingEnabled(ztsSettings.steering, "DR") then
         inputTable.curveType = 1
-        inputTable.curveValue = -127
+        inputTable.curveValue = 1255
     else
         inputTable.curveType = 0
         inputTable.curveValue = 0
@@ -227,13 +245,13 @@ local function setInputs()
         inputTable.inputName = "RBR"
         inputTable.source = 76
         if settingEnabled(ztsSettings.brake, "limit") then
-            inputTable.weight = -126
+            inputTable.weight = 1256
         else
             inputTable.weight = 100
         end
         inputTable.curveType = 0
         if settingEnabled(ztsSettings.brake, "balance") then
-            inputTable.curveValue = -125
+            inputTable.curveValue = 1257
         else
             inputTable.curveValue = 0
         end
@@ -250,9 +268,9 @@ local function setInputs()
     if settingEnabled(ztsSettings.brake, "servo") then
         inputTable.inputName = "FBR"
         inputTable.source = 76
-        inputTable.weight = -126
+        inputTable.weight = 1256
         inputTable.curveType = 0
-        inputTable.curveValue = 124
+        inputTable.curveValue = -1257
         model.insertInput(brakeServoInput, 0, inputTable)
     end
 end

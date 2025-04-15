@@ -3,12 +3,13 @@ CHANNEL = 1
 SOURCE = 2
 SWITCH = 3
 COMBO = 4
-COMBOBOX = 5
-TEXT = 6
-VALUE = 7
-CHECKBOX = 8
-FUNCTION = 9
-SUBMENU = 10
+COMBOTEXT = 5
+COMBOBOX = 6
+TEXT = 7
+VALUE = 8
+CHECKBOX = 9
+FUNCTION = 10
+SUBMENU = 11
 
 TEST = 99
 
@@ -34,9 +35,13 @@ local function getFieldValue(field)
         local sub = field.setting
         value = ztsSettings
         for index=1, #sub, 1 do value = value[sub[index]] end
-        --value = value[field.value]
-    elseif field.setting ~= nil then
-        value = ztsSettings[field.setting][field.value]
+    end
+
+    if field.type == COMBOTEXT then
+        for index=1, #field.options-1, 1 do
+            if value == field.options[index] then return index-1 end
+        end
+        return 0
     end
 
     return value
@@ -47,7 +52,12 @@ local function setFieldValue(field, value)
     local sub = field.setting
     local table = ztsSettings
     for index=1, #sub-1, 1 do table = table[sub[index]] end
-    table[field.setting[#field.setting]] = value
+
+    if field.type == COMBOTEXT then
+        table[field.setting[#field.setting]] = field.options[value+1]
+    else
+        table[field.setting[#field.setting]] = value
+    end
 end
 
 -- check if field is visible
@@ -130,7 +140,7 @@ local function addField(step)
     elseif field.type == SWITCH then
         min = -18
         max = 18
-    elseif field.type == COMBO or field.type == COMBOBOX then
+    elseif field.type == COMBO or field.type == COMBOTEXT or field.type == COMBOBOX then
         min = 0
         max = #(field.options) - 1
     elseif field.type == VALUE then
@@ -141,7 +151,7 @@ local function addField(step)
     local value = getFieldValue(field)
     if (step < 0 and value > min) or (step > 0 and value < max) then
         setFieldValue(field, value + step)
-        print(value)
+        --print(value)
     end
 end
 
@@ -213,7 +223,7 @@ local function redrawFieldPage()
         elseif field.type == SWITCH then
             lcd.drawText(field.xPos, (spacing * index) + yOffset, field.name, LEFT + attr)
             lcd.drawSwitch(LCD_W - 29, (spacing * index) + yOffset, value, attr)
-        elseif field.type == COMBO then
+        elseif field.type == COMBO or field.type == COMBOTEXT then
             if value > #field.options then value = 0 end
             lcd.drawText(field.xPos, (spacing * index) + yOffset, field.name, LEFT + attr)
             width = (#field.options[value + 1] + 1) * charWidth

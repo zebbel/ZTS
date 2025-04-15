@@ -2,10 +2,10 @@ local shared = ...
 
 local driveMode = 0
 local showMenuFlag = false
+local subMenu = 0
 edit = false
 field = 0
 fieldMax = 1
-dirty = false
 
 loadScript("/SCRIPTS/helper/guiFunctions.lua")()
 
@@ -93,8 +93,6 @@ function shared.init()
     end
 end
 
-local subMenu = 0
-
 local function showTrim(event)
     navigate(event, fieldMax, 0, 0)
 
@@ -160,6 +158,8 @@ local function copyTrims(dm)
         gv = model.getGlobalVariable(3, driveMode)
         model.setGlobalVariable(3, dm, gv)
     end
+
+    showMenuFlag = false
 end
 
 local function showMenu(event)
@@ -193,11 +193,10 @@ local function showMenu(event)
                 elseif driveMode == 1 then copyTrims(2)
                 elseif driveMode == 2 then copyTrims(1) end
             end
+        elseif event == EVT_VIRTUAL_EXIT then 
+            showMenuFlag = false
         else
             navigate(event, fieldMax, 0, 0)
-        end
-        if event == EVT_VIRTUAL_EXIT then 
-            showMenuFlag = false
         end
     elseif subMenu == 1 then
         showTrim(event)
@@ -215,7 +214,11 @@ function shared.run(event)
     drawBrake()
 
     if not alarmActiv then
-        if showMenuFlag == true then
+        if not showMenuFlag and event == EVT_VIRTUAL_ENTER then
+            showMenuFlag = true
+            edit = false
+
+        elseif showMenuFlag == true then
             showMenu(event)
         end
 
@@ -224,11 +227,6 @@ function shared.run(event)
             shared.changeScreen(1)
         elseif event == 101 then
             shared.changeScreen(-1)
-        end
-
-        if not showMenuFlag and event == EVT_VIRTUAL_ENTER then
-            showMenuFlag = true
-            edit = false
         end
     else
         showMenuFlag = false

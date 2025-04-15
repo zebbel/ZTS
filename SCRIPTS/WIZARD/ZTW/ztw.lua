@@ -10,6 +10,8 @@ loadScript("/SCRIPTS/helper/ztsSettings.lua", 'tc')()
 loadScript("/SCRIPTS/helper/widgets.lua", 'tc')()
 loadScript("/SCRIPTS/WIZARD/ZTW/ui.lua", 'tc')()
 
+
+
 local function init()
     -- check if file exist and load settings so pages.lua knows what base settings are used for model
     if fileExists(settingFilePath) then
@@ -29,6 +31,15 @@ local function init()
 
     -- init the ui
     initUI(startPage)
+
+
+    --for k,v in pairs(model.getCustomFunction(5)) do
+    --  print(k, v)
+    --end
+
+    --for k,v in pairs(model.getInput(3,0)) do
+    --    print(k, v)
+    --end
 end
 
 local function run(event)

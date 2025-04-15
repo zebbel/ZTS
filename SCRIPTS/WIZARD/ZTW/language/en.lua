@@ -48,6 +48,8 @@ language = {
     ztmTimerAutoReste = "auto reset",
     ztsStartSwitch = "start Switch",
 
+    telemetryAuto = "autostart",
+
     batIndicator = "batt indicator?",
     batIndicatorMode = "mode",
     batIndicatorType = "lipo type",

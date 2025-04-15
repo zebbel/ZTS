@@ -48,6 +48,8 @@ language = {
     ztmTimer = "Timer?",
     ztsStartSwitch = "Start Schalter",
 
+    telemetryAuto = "Autostart",
+
     batIndicator = "Batterie Anzeige?",
     batIndicatorMode = "mode",
     batIndicatorType = "lipo type",

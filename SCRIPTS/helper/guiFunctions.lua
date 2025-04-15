@@ -36,16 +36,17 @@ function fieldIncDec(event, value, max, force)
     return value
 end
 
-function valueIncDec(event, value, min, max)
+function valueIncDec(event, value, min, max, stepp)
+    stepp = stepp == nil and 1 or stepp
     if edit then
         if event == EVT_VIRTUAL_INC or event == EVT_VIRTUAL_INC_REPT then
             if value < max then
-                value = (value + 1)
+                value = (value + stepp)
                 dirty = true
             end
         elseif event == EVT_VIRTUAL_DEC or event == EVT_VIRTUAL_DEC_REPT then
             if value > min then
-                value = (value - 1)
+                value = (value - stepp)
                 dirty = true
             end
         end

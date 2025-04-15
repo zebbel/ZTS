@@ -66,6 +66,11 @@ local function setSpecialFunctions()
         setSetting({"customFn", 5}, {swtch='"L1"', func="RGB_LED", def='"orange,1"'})
         setSetting({"customFn", 6}, {swtch='"ON"', func="RGB_LED", def='"green,1"'})
     end
+
+    --telemtry screen autostart
+    if settingEnabled(ztsSettings.zts, "enable") then
+        setSetting({"customFn", 7}, {swtch='"ON"', func="SET_SCREEN", def='"1,1,1x"'})
+    end
 end
 
 local function setInputs()
